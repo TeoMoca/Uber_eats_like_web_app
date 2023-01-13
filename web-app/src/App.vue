@@ -1,30 +1,51 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <v-app>
+    <v-main>
+      <nav-bar />
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
+<script lang="ts">
+import { defineComponent } from "vue";
+
+import NavBar from "./components/NavBar.vue";
+
+export default defineComponent({
+  name: "App",
+  components: {
+    NavBar,
+  },
+  data() {
+    return {
+      //
+    };
+  },
+});
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+  --light-mode-color-one: #000;
+  --light-mode-color-two: #e0e0ce;
+  --light-mode-color-three: #a4243b;
+  --light-mode-color-four: #ff7f11;
+  --light-mode-color-five: #ff3f00;
+
+  --dark-mode-color-one: #fff;
+  --dark-mode-color-two: #00000;
+  --dark-mode-color-three: #00000;
+  --dark-mode-color-four: #00000;
+  --dark-mode-color-five: #00000;
 }
 
-nav {
-  padding: 30px;
+i {
+  color: var(--light-mode-color-two);
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 </style>
