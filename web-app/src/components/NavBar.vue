@@ -65,8 +65,8 @@ export default defineComponent({
         },
       })
       .then((rep) => {
-        rep.data.map((item: { first_name: string }) => {
-          this.restaurants.push(item.first_name);
+        rep.data.map((item: { firstname: string }) => {
+          this.restaurants.push(item.firstname);
         });
       });
   },
@@ -90,17 +90,17 @@ export default defineComponent({
       return filteredFruits;
     },
     getUserInitials() {
-      const first_name = cookies.get("first_name");
-      const last_name = cookies.get("last_name");
-      if (first_name && last_name) {
-        this.initials = first_name?.charAt(0) + last_name?.charAt(0) || "";
+      const firstname = cookies.get("firstname");
+      const lastname = cookies.get("lastname");
+      if (firstname && lastname) {
+        this.initials = firstname?.charAt(0) + lastname?.charAt(0) || "";
         return this.initials;
       }
     },
     disconnect() {
       cookies.remove("token");
-      cookies.remove("first_name");
-      cookies.remove("last_name");
+      cookies.remove("firstname");
+      cookies.remove("lastname");
       this.$router.push({ path: "/" });
     },
   },
