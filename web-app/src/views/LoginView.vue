@@ -4,9 +4,9 @@
       <v-text-field
         required
         clearable
-        @click:clear="clearEmail"
-        :rules="emailRules"
-        v-model="email"
+        @click:clear="clearmail"
+        :rules="mailRules"
+        v-model="mail"
         label="E-Mail"
       ></v-text-field>
       <v-text-field
@@ -32,8 +32,8 @@ export default defineComponent({
   components: {},
 
   data: () => ({
-    email: "",
-    emailRules: [
+    mail: "",
+    mailRules: [
       (v: string) => {
         return !!v || "E-mail is required";
       },
@@ -46,7 +46,7 @@ export default defineComponent({
 
   computed: {
     isDisabled() {
-      return !(this.email.length > 0) || !(this.password.length > 0);
+      return !(this.mail.length > 0) || !(this.password.length > 0);
     },
   },
 
@@ -56,7 +56,7 @@ export default defineComponent({
       this.$axios
         .post(
           "http://localhost:8000/users/login",
-          { email: this.email.toLowerCase(), password: this.password },
+          { mail: this.mail.toLowerCase(), password: this.password },
           {
             headers: {
               "Content-Type": "application/json",
@@ -68,13 +68,13 @@ export default defineComponent({
           document.cookie = `token=${e.data.token};expires=${new Date(
             Date.now() + 1000 * 60 * 60 * 24
           ).toUTCString()}`;
-          document.cookie = `last_name=${
-            e.data.user.last_name
+          document.cookie = `lastname=${
+            e.data.data.lastname
           };expires=${new Date(
             Date.now() + 1000 * 60 * 60 * 24
           ).toUTCString()}`;
-          document.cookie = `first_name=${
-            e.data.user.first_name
+          document.cookie = `firstname=${
+            e.data.data.firstname
           };expires=${new Date(
             Date.now() + 1000 * 60 * 60 * 24
           ).toUTCString()}`;
@@ -84,8 +84,8 @@ export default defineComponent({
           window.alert(e.response.data.message);
         });
     },
-    clearEmail() {
-      this.email = "";
+    clearmail() {
+      this.mail = "";
     },
     clearPassword() {
       this.password = "";

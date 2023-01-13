@@ -11,8 +11,8 @@ import type { Store } from "vuex";
 
 declare module "@vue/runtime-core" {
   interface State {
-    last_name: string;
-    first_name: string;
+    lastname: string;
+    firstname: string;
   }
 
   interface ComponentCustomProperties {

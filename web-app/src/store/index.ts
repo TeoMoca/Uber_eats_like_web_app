@@ -2,8 +2,8 @@ import { createStore } from "vuex";
 
 const store = createStore({
   state: {
-    first_name: "",
-    last_name: "",
+    firstname: "",
+    lastname: "",
   },
   getters: {},
   mutations: {},
