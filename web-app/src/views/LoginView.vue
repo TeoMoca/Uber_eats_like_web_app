@@ -17,6 +17,7 @@
         :type="'password'"
         label="Password"
       ></v-text-field>
+      <v-btn variant="plain" @click="RedirectRegister"> S'enregistrer </v-btn>
       <v-btn type="submit" :disabled="isDisabled">Se connecter </v-btn>
     </v-form>
   </div>
@@ -51,6 +52,9 @@ export default defineComponent({
   },
 
   methods: {
+    RedirectRegister() {
+      this.$router.push("/Register");
+    },
     validate(e: Event) {
       e.preventDefault();
       this.$axios

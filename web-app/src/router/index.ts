@@ -39,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/:catchAll(.*)",
     redirect: "/",
   },
+  {
+    path: "/Register",
+    name: "Register",
+    component: () => import("../views/RegisterView.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -53,6 +58,7 @@ router.beforeEach((to, from, next) => {
     return next();
   } else {
     if (to.path === "/") return next();
+    if (to.path === "/Register") return next();
     return next({ path: "/" });
   }
 });
