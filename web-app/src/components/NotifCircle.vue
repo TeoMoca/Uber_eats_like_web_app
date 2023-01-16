@@ -23,7 +23,7 @@
       </div>
     </template>
     <v-list>
-      <v-list-item v-if="howMany_unseen == 0" link>
+      <v-list-item v-if="howMany_notifs == 0" link>
         <v-list-item-title>vous n'avez pas de notifications</v-list-item-title>
       </v-list-item>
       <v-list-item v-for="notif in notifs" :key="notif.message" link>
