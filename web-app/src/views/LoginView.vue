@@ -82,6 +82,9 @@ export default defineComponent({
           };expires=${new Date(
             Date.now() + 1000 * 60 * 60 * 24
           ).toUTCString()}`;
+          document.cookie = `userId=${e.data.data.id};expires=${new Date(
+            Date.now() + 1000 * 60 * 60 * 24
+          ).toUTCString()}`;
           this.$router.push({ path: "/home" });
         })
         .catch((e) => {
