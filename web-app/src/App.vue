@@ -3,6 +3,7 @@
     <v-main>
       <nav-bar />
       <router-view />
+      <notif-circle v-if="condition" />
     </v-main>
   </v-app>
 </template>
@@ -11,16 +12,26 @@
 import { defineComponent } from "vue";
 
 import NavBar from "./components/NavBar.vue";
+import NotifCircle from "./components/NotifCircle.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     NavBar,
+    NotifCircle,
   },
   data() {
     return {
       //
     };
+  },
+  computed: {
+    condition() {
+      var isdisplay = true;
+      if (this.$route.path === "/") isdisplay = false;
+      if (this.$route.path === "/Register") isdisplay = false;
+      return !(this.$route.path === "/" || this.$route.path === "/register");
+    },
   },
 });
 </script>
