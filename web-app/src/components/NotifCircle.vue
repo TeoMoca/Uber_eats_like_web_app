@@ -1,9 +1,9 @@
 <template>
   <v-menu transition="scroll-y-transition">
     <template v-slot:activator="{ props }">
-      <div v-if="this.howMany_notifs > 0" class="notifs">
+      <div v-if="howMany_unseen > 0" class="notifs">
         <!--if notifs not seen -->
-        <v-badge :content="this.howMany_notifs" color="red lighten-1">
+        <v-badge :content="howMany_unseen" color="red lighten-1">
           <v-btn
             v-on:click="seeNotifs"
             icon="mdi-bell-outline"
@@ -23,17 +23,17 @@
       </div>
     </template>
     <v-list>
-      <v-list-item v-if="howMany_notifs == 0" link>
+      <v-list-item v-if="howMany_unseen == 0" link>
         <v-list-item-title>vous n'avez pas de notifications</v-list-item-title>
       </v-list-item>
-      <v-list-item v-for="notif in this.notifs" :key="notif.message" link>
+      <v-list-item v-for="notif in notifs" :key="notif.message" link>
         <v-list-item-title v-text="notif.message"></v-list-item-title>
       </v-list-item>
     </v-list>
   </v-menu>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "NotifCircle",
 
@@ -53,7 +53,7 @@ export default {
   },
 
   computed: {
-    howMany_notifs: function () {
+    howMany_unseen: function () {
       var n = 0;
       //console.log(this.notifs[0].seen );
       for (var notif in this.notifs) {
@@ -62,6 +62,14 @@ export default {
           //si la notif n'a pas été vue:
           n++;
         }
+      }
+      return n;
+    },
+    howMany_notifs: function () {
+      var n = 0;
+      //console.log(this.notifs[0].seen );
+      for (var notif in this.notifs) {
+        n++;
       }
       return n;
     },
