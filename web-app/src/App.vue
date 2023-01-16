@@ -48,4 +48,19 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+body ::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+body ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 20px;
+}
+
+body ::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: var(--light-mode-color-four);
+}
 </style>

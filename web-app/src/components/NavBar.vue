@@ -163,19 +163,6 @@ export default defineComponent({
   transition: all 1s ease-in-out;
 }
 
-.search-items::-webkit-scrollbar {
-  width: 10px;
-}
-
-.search-items::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.search-items::-webkit-scrollbar-thumb {
-  border-radius: 20px;
-  background: var(--light-mode-color-four);
-}
-
 .search-items .item {
   text-decoration: none;
   padding: 10px 5px;

@@ -18,7 +18,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .restaurant-title {
   display: flex;
   width: 100%;
