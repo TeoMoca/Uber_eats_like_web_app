@@ -10,7 +10,7 @@
     </h1>
 
     <v-spacer></v-spacer>
-    <div class="search-bar" v-if="$route.path != '/'">
+    <div class="search-bar" v-if="condition">
       <input
         type="text"
         v-model="search"
@@ -31,12 +31,8 @@
         </div>
       </div>
     </div>
-    <v-icon v-if="$route.path != '/'">mdi-shopping</v-icon>
-    <div
-      tabindex="1"
-      class="user"
-      v-if="getUserInitials() && $route.path != '/'"
-    >
+    <v-icon v-if="condition">mdi-shopping</v-icon>
+    <div tabindex="1" class="user" v-if="getUserInitials() && condition">
       {{ getUserInitials() }}
       <div class="options">
         <p>Modifier mes informations</p>
@@ -56,6 +52,14 @@ const cookies = new Cookies();
 
 export default defineComponent({
   name: "NavBar",
+  computed: {
+    condition() {
+      var isdisplay = true;
+      if (this.$route.path === "/") isdisplay = false;
+      if (this.$route.path === "/Register") isdisplay = false;
+      return isdisplay;
+    },
+  },
   beforeCreate() {
     this.$axios
       .get("http://localhost:8000/users/", {
