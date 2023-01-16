@@ -35,7 +35,9 @@
     <div tabindex="1" class="user" v-if="getUserInitials() && condition">
       {{ getUserInitials() }}
       <div class="options">
-        <p>Modifier mes informations</p>
+        <v-btn variant="plain" @click="RedirectProfile">
+          Mes informations
+        </v-btn>
         <p>Voir mes commandes</p>
         <p>Ah ouais</p>
         <p class="disconnect" @click="disconnect">Me déconnecter</p>
@@ -86,6 +88,9 @@ export default defineComponent({
     initials: "",
   }),
   methods: {
+    RedirectProfile() {
+      this.$router.push("/Profile");
+    },
     filteredList() {
       const regex = new RegExp("^" + this.$data.search.toLowerCase());
       const filteredFruits = this.$data.restaurants.filter((restaurant) =>

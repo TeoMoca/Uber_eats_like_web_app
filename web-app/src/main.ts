@@ -13,6 +13,7 @@ declare module "@vue/runtime-core" {
   interface State {
     lastname: string;
     firstname: string;
+    userId: string;
   }
 
   interface ComponentCustomProperties {

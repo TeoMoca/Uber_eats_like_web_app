@@ -4,6 +4,7 @@ const store = createStore({
   state: {
     firstname: "",
     lastname: "",
+    userId: "",
   },
   getters: {},
   mutations: {},
