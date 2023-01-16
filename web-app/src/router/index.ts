@@ -44,6 +44,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "Register",
     component: () => import("../views/RegisterView.vue"),
   },
+  {
+    path: "/Profile",
+    name: "Profile",
+    component: () => import("../views/ProfileView.vue"),
+  },
 ];
 
 const router = createRouter({
