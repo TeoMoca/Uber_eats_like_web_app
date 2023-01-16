@@ -34,7 +34,9 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "NotifCircle",
 
   data: () => ({}),
@@ -74,12 +76,12 @@ export default {
       return n;
     },
   },
-};
+});
 </script>
 
 <style scoped>
 .notifs {
-  position: absolute;
+  position: fixed;
   bottom: 5%;
   right: 5%;
 }

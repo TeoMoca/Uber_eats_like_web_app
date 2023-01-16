@@ -110,6 +110,7 @@ export default defineComponent({
       cookies.remove("token");
       cookies.remove("firstname");
       cookies.remove("lastname");
+      cookies.remove("userId");
       this.$router.push({ path: "/" });
     },
   },
