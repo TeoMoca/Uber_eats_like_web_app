@@ -3,7 +3,7 @@
     <v-main>
       <nav-bar />
       <router-view />
-      <notif-circle v-if="condition" :id_user="id_user" :notifs="notifs" />
+      <notif-circle v-if="condition" :id-user="id_user" />
     </v-main>
   </v-app>
 </template>
@@ -25,25 +25,13 @@ export default defineComponent({
   },
   data: () => ({
     id_user: "",
-    notifs: Object,
-    requestUrl: "http://127.0.0.1:3001/notifs/",
   }),
 
   created() {
     this.id_user = cookies.get("userId") || "";
-    fetch(this.requestUrl + this.id_user, { method: "GET" }).then((rep) => {
-      console.log("requrl", this.requestUrl + this.id_user);
-      rep.json().then((data) => {
-        console.log(data);
-        this.notifs = data;
-      });
-    });
   },
   computed: {
     condition() {
-      var isdisplay = true;
-      if (this.$route.path === "/") isdisplay = false;
-      if (this.$route.path === "/Register") isdisplay = false;
       return !(this.$route.path === "/" || this.$route.path === "/register");
     },
   },

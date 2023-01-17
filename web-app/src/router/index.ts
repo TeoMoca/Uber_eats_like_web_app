@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Cookies from "cookies-ts";
 import LoginView from "../views/LoginView.vue";
+import HomeView from "../views/HomeView.vue";
 import RestaurantView from "../views/RestaurantView.vue";
 import axios from "axios";
 
@@ -18,8 +19,31 @@ const routes: Array<RouteRecordRaw> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/HomeView.vue"),
+    component: () => {
+      return axios
+        .get(`http://localhost:5001/api/users/${cookies.get("userId")}`)
+        .then((rep) => {
+          console.log(rep.data.roleId);
+          switch (rep.data.roleId) {
+            case 1: {
+              console.log("coucou");
+              return HomeView;
+            }
+            case 2: {
+              return HomeView;
+            }
+            case 3: {
+              return HomeView;
+            }
+            case 4: {
+              return HomeView;
+            }
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    },
   },
   {
     path: "/restaurants/:name",

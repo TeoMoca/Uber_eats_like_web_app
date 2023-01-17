@@ -1,6 +1,10 @@
 <template>
+  <img
+    :src="'https://pizzastreet.fr/wp-content/uploads/2021/06/cropped-logo-light-png-1-1.png'"
+    class="restaurant-image"
+  />
   <div class="restaurant-title">
-    {{ $route.params.name }}
+    <p>{{ $route.params.name }}</p>
   </div>
 </template>
 
@@ -21,9 +25,19 @@ export default defineComponent({
 <style scoped>
 .restaurant-title {
   display: flex;
+  flex-direction: column;
   width: 100%;
+}
+
+.restaurant-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: flex;
+}
+
+.restaurant-title p {
   font-size: 45px;
-  align-items: center;
-  justify-content: center;
+  padding: 10px 20px;
 }
 </style>

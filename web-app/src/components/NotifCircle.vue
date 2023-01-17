@@ -2,7 +2,6 @@
   <v-menu transition="scroll-y-transition">
     <template v-slot:activator="{ props }">
       <div v-if="howMany_unseen > 0" class="notifs">
-        <!--if notifs not seen -->
         <v-badge :content="howMany_unseen" color="red lighten-1">
           <v-btn
             v-on:click="seeNotifs"
@@ -13,7 +12,6 @@
         </v-badge>
       </div>
       <div v-else class="notifs">
-        <!-- else -->
         <v-btn
           v-on:click="seeNotifs"
           icon="mdi-bell-outline"
@@ -23,10 +21,10 @@
       </div>
     </template>
     <v-list>
-      <v-list-item v-if="howMany_notifs == 0" link>
-        <v-list-item-title>vous n'avez pas de notifications</v-list-item-title>
+      <v-list-item v-if="getNotificationsNumber() === 0" link>
+        <v-list-item-title>Vous n'avez pas de notifications</v-list-item-title>
       </v-list-item>
-      <v-list-item v-for="notif in notifs" :key="notif.message" link>
+      <v-list-item v-for="notif in notifications" :key="notif.message" link>
         <v-list-item-title v-text="notif.message"></v-list-item-title>
       </v-list-item>
     </v-list>
@@ -39,43 +37,46 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "NotifCircle",
 
-  data: () => ({}),
+  data: (): {
+    notifications: { message: string; seen: boolean }[];
+  } => ({
+    notifications: [],
+  }),
   props: {
-    notifs: Object,
-    id_user: String,
+    "id-user": String,
+  },
+
+  created() {
+    if (this.$props["id-user"]) {
+      this.$axios
+        .get("http://127.0.0.1:3001/notifs/" + this.$props["id-user"])
+        .then((rep) => {
+          rep.data.map((notification: never) => {
+            this.notifications.push(notification);
+          });
+        });
+    }
   },
 
   methods: {
-    seeNotifs: function () {
-      var request = "http://127.0.0.1:3001/notifs/seen/" + this.id_user;
+    seeNotifs() {
+      var request =
+        "http://127.0.0.1:3001/notifs/seen/" + this.$props["id-user"];
       fetch(request, { method: "PUT" }).then((rep) => {
         rep.json();
       });
     },
+    howMany_unseen() {
+      return this.notifications.filter((notif) => {
+        return notif.seen === false;
+      }).length;
+    },
+    getNotificationsNumber() {
+      return this.notifications.length;
+    },
   },
 
-  computed: {
-    howMany_unseen: function () {
-      var n = 0;
-      //console.log(this.notifs[0].seen );
-      for (var notif in this.notifs) {
-        //console.log(notif)
-        if (this.notifs[notif].seen == false) {
-          //si la notif n'a pas été vue:
-          n++;
-        }
-      }
-      return n;
-    },
-    howMany_notifs: function () {
-      var n = 0;
-      //console.log(this.notifs[0].seen );
-      for (var notif in this.notifs) {
-        n++;
-      }
-      return n;
-    },
-  },
+  computed: {},
 });
 </script>
 
