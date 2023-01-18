@@ -32,6 +32,9 @@
       </div>
     </div>
     <v-icon v-if="condition">mdi-shopping</v-icon>
+    <v-btn :to="'/livraison'" v-if="livraison"
+      ><v-icon v-if="livraison">mdi-bicycle-basket</v-icon></v-btn
+    >
     <div tabindex="1" class="user" v-if="getUserInitials() && condition">
       {{ getUserInitials() }}
       <div class="options">
@@ -61,10 +64,23 @@ export default defineComponent({
       if (this.$route.path === "/Register") isdisplay = false;
       return isdisplay;
     },
+    livraison() {
+      var isdisplay = true;
+      if (this.$data.livraisons === undefined) {
+        isdisplay = false;
+      }
+      if (
+        this.$route.path === "/livraison" &&
+        this.$data.livraisons.length < 2
+      ) {
+        isdisplay = false;
+      }
+      return isdisplay;
+    },
   },
   beforeCreate() {
     this.$axios
-      .get("http://localhost:8000/users/", {
+      .get("http://localhost:5001/api/users/", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -75,17 +91,25 @@ export default defineComponent({
           this.restaurants.push(item.firstname);
         });
       });
+    this.$axios
+      .get("http://localhost:3000/livraison/livreur/" + cookies.get("userId"))
+      .then((resp) => {
+        this.livraisons = resp.data.length();
+        console.log(resp.data);
+      });
   },
   data: (): {
     title: string;
     search: string;
     restaurants: string[];
     initials: string;
+    livraisons: string;
   } => ({
     title: "U Beuh'r Eats",
     search: "",
     restaurants: [],
     initials: "",
+    livraisons: "",
   }),
   methods: {
     RedirectProfile() {

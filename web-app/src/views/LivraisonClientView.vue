@@ -60,39 +60,50 @@
   </div>
 </template>
 
-<script lang="js">
+<script lang="ts">
 import { defineComponent } from "vue";
 import ProgressBar from "./../components/ProgressBar.vue";
 import axios from "axios";
+import Cookies from "cookies-ts";
 
+const cookies = new Cookies();
 
 export default defineComponent({
-    name: "LivraisonView",
-    data() {
-        return {
-            idLivreur: "0daaf5b6-5299-44b8-9d45-fe4270d34ea1",
-            livreurData:{},
-            commandeData:{},
-            livraisonData:{},
-            currentStateLivraison:1,
-        }
-    },
-    methods: { },
-    computed: {
-    },
-    components: { ProgressBar },
-    created() {
-      //recupère les données du livreur
-      axios.get("http://localhost:7000/api/users/"+this.idLivreur).then(res => {
-      this.livreurData=res.data})
-      //recupère les données de la livraison
-      axios.get("http://localhost:3000/livraison/livreur/"+this.idLivreur).then(resLivraison =>{ this.commandeData = resLivraison.data
-      //recupère les données de la commande
-      axios.get("http://localhost:3000/commande/"+resLivraison.data.commandeID).then(resCommande =>{ this.commandeData = resCommande.data })
-      })
-      // res.data.forEach(element => {
-      // this.livreurData.livreurFName = element.firstname, this.livreurData.livreurLName = element.lastname, this.livreurData.livreurPNumber = element.phone, console.log(element)})
-  }
+  name: "LivraisonView",
+  data() {
+    return {
+      idLivreur: cookies.get("userId"),
+      livreurData: {},
+      commandeData: {},
+      livraisonData: {},
+      currentStateLivraison: 1,
+    };
+  },
+  methods: {},
+  computed: {},
+  components: { ProgressBar },
+  created() {
+    //recupère les données du livreur
+    axios
+      .get("http://localhost:7000/api/users/" + this.idLivreur)
+      .then((res) => {
+        this.livreurData = res.data;
+      });
+    //recupère les données de la livraison
+    axios
+      .get("http://localhost:3000/livraison/livreur/" + this.idLivreur)
+      .then((resLivraison) => {
+        this.commandeData = resLivraison.data;
+        //recupère les données de la commande
+        axios
+          .get("http://localhost:3000/commande/" + resLivraison.data.commandeID)
+          .then((resCommande) => {
+            this.commandeData = resCommande.data;
+          });
+      });
+    // res.data.forEach(element => {
+    // this.livreurData.livreurFName = element.firstname, this.livreurData.livreurLName = element.lastname, this.livreurData.livreurPNumber = element.phone, console.log(element)})
+  },
 });
 </script>
 
