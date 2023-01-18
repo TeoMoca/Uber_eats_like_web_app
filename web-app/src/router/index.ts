@@ -123,7 +123,8 @@ router.beforeEach((to, from, next) => {
       to.path === "/" ||
       to.path === "/register" ||
       to.path === "/customerRegister" ||
-      to.path === "/deliveryRegister"
+      to.path === "/deliveryRegister" ||
+      to.path === "/restaurateurRegister"
     )
       return next();
     return next({ path: "/" });
