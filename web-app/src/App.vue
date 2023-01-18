@@ -29,7 +29,9 @@ export default defineComponent({
   data: () => ({
     id_user: "",
   }),
-
+  beforeCreate() {
+    this.$store.commit("initialiseStore");
+  },
   created() {
     console.log(cookies.get("userId"));
     this.id_user = cookies.get("userId") || "";

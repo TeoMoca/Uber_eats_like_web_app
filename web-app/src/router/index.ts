@@ -96,6 +96,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "DeliveryRegister",
     component: () => import("../views/DeliveryView.vue"),
   },
+  {
+    path: "/Checkout",
+    name: "Checkout",
+    component: () => import("../views/CheckoutView.vue"),
+  },
 ];
 
 const router = createRouter({
