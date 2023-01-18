@@ -86,6 +86,16 @@ const routes: Array<RouteRecordRaw> = [
     name: "Refer",
     component: () => import("../views/ReferView.vue"),
   },
+  {
+    path: "/customerRegister",
+    name: "CustomerRegister",
+    component: () => import("../views/CustomerView.vue"),
+  },
+  {
+    path: "/deliveryRegister",
+    name: "DeliveryRegister",
+    component: () => import("../views/DeliveryView.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -99,7 +109,13 @@ router.beforeEach((to, from, next) => {
     if (to.path === "/") return next({ path: "/home" });
     return next();
   } else {
-    if (to.path === "/" || to.path === "/register") return next();
+    if (
+      to.path === "/" ||
+      to.path === "/register" ||
+      to.path === "/customerRegister" ||
+      to.path === "/deliveryRegister"
+    )
+      return next();
     return next({ path: "/" });
   }
 });
