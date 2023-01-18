@@ -88,6 +88,11 @@
           :rules="cityrules"
           required
         />
+        <v-text-field
+          v-model="refercode"
+          class="mb-2"
+          label="Parrainage (email)"
+        />
       </v-container>
       <v-divider></v-divider>
 
@@ -114,6 +119,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   data: () => ({
     valid: false,
+    refercode: "",
     firstname: "",
     firstnamerules: [(v) => !!v || "le prénom est requis"],
     lastname: "",
@@ -176,7 +182,12 @@ export default defineComponent({
         axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
         const response = await axios.post(
           "http://localhost:8000/users/register",
-          { user: user, adress: adress, IdRole: this.select },
+          {
+            user: user,
+            adress: adress,
+            IdRole: this.select,
+            sponsorMail: this.refercode,
+          },
           {
             headers: {
               "Content-Type": "application/json",

@@ -35,11 +35,9 @@
     <div tabindex="1" class="user" v-if="getUserInitials() && condition">
       {{ getUserInitials() }}
       <div class="options">
-        <v-btn variant="plain" @click="RedirectProfile">
-          Mes informations
-        </v-btn>
+        <p @click="RedirectProfile">Mes informations</p>
         <p>Voir mes commandes</p>
-        <p>Ah ouais</p>
+        <p>Parrainez un amis</p>
         <p class="disconnect" @click="disconnect">Me déconnecter</p>
       </div>
     </div>
