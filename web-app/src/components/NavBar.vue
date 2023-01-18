@@ -54,10 +54,12 @@ export default defineComponent({
   name: "NavBar",
   computed: {
     condition() {
-      var isdisplay = true;
-      if (this.$route.path === "/") isdisplay = false;
-      if (this.$route.path === "/Register") isdisplay = false;
-      return isdisplay;
+      return !(
+        this.$route.path === "/" ||
+        this.$route.path === "/register" ||
+        this.$route.path === "/customerRegister" ||
+        this.$route.path === "/deliveryRegister"
+      );
     },
   },
   beforeCreate() {
