@@ -12,19 +12,27 @@ export const store = createStore<State>({
     cart: [],
   },
   mutations: {
-    addCount(state) {
+    addCount(state, itemToAdd) {
       state.count++;
       const item = new Item(
-        "yes",
-        2,
-        "victo",
-        "beau",
+        itemToAdd.id,
+        itemToAdd.id_restaurant,
+        itemToAdd.name,
+        itemToAdd.picture,
         "très",
         "italien",
-        52,
-        1
+        itemToAdd.price,
+        itemToAdd.quantity
       );
       state.cart.push(item);
+    },
+
+    addQuantity(state, data) {
+      for (const item of state.cart) {
+        if (item.id == data.id) {
+          item.quantity++;
+        }
+      }
     },
 
     initialiseStore(state) {
@@ -50,13 +58,13 @@ export const store = createStore<State>({
     getSubCartTotal(state) {
       let total = 0;
 
-      for (const price of state.cart) total = +price.price;
+      for (const price of state.cart) total += price.price;
       return total;
     },
     getTax(state) {
       let total = 0;
 
-      for (const price of state.cart) total = +price.price;
+      for (const price of state.cart) total += price.price;
 
       return total * 0.01;
     },
@@ -64,8 +72,10 @@ export const store = createStore<State>({
     cartTotal(state) {
       let total = 0;
       let tax = 0;
-      for (const price of state.cart) total = +price.price;
-
+      for (const price of state.cart) {
+        const article = price.price * price.quantity;
+        total += price.price;
+      }
       tax = total * 0.01;
 
       return total + tax;
