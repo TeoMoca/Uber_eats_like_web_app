@@ -58,6 +58,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "Profile",
     component: () => import("../views/ProfileView.vue"),
   },
+  {
+    path: "/Refer",
+    name: "Refer",
+    component: () => import("../views/ReferView.vue"),
+  },
 ];
 
 const router = createRouter({
