@@ -37,7 +37,12 @@ export default defineComponent({
   },
   computed: {
     condition() {
-      return !(this.$route.path === "/" || this.$route.path === "/register");
+      return !(
+        this.$route.path === "/" ||
+        this.$route.path === "/register" ||
+        this.$route.path === "/customerRegister" ||
+        this.$route.path === "/deliveryRegister"
+      );
     },
   },
 });
