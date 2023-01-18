@@ -40,7 +40,7 @@ export default defineComponent({
   margin-bottom: 40px;
 }
 h2 {
-  text-align: right;
+  text-align: left;
   line-height: 30px;
   margin-bottom: 20px;
   border-bottom: 3px solid black;

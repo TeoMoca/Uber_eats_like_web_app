@@ -26,7 +26,6 @@ const routes: Array<RouteRecordRaw> = [
           console.log(rep.data.roleId);
           switch (rep.data.roleId) {
             case 1: {
-              console.log("coucou");
               return HomeView;
             }
             case 2: {
@@ -64,8 +63,8 @@ const routes: Array<RouteRecordRaw> = [
     redirect: "/",
   },
   {
-    path: "/Register",
-    name: "Register",
+    path: "/register",
+    name: "register",
     component: () => import("../views/RegisterView.vue"),
   },
   {
@@ -86,8 +85,7 @@ router.beforeEach((to, from, next) => {
     if (to.path === "/") return next({ path: "/home" });
     return next();
   } else {
-    if (to.path === "/") return next();
-    if (to.path === "/Register") return next();
+    if (to.path === "/" || to.path === "/register") return next();
     return next({ path: "/" });
   }
 });

@@ -2,6 +2,7 @@
   <v-app>
     <v-main>
       <nav-bar />
+      <back-to-page />
       <router-view />
       <notif-circle v-if="condition" :id-user="id_user" />
     </v-main>
@@ -13,6 +14,7 @@ import { defineComponent } from "vue";
 
 import NavBar from "./components/NavBar.vue";
 import NotifCircle from "./components/NotifCircle.vue";
+import BackToPage from "./components/BackToPage.vue";
 
 import Cookies from "cookies-ts";
 const cookies = new Cookies();
@@ -22,13 +24,16 @@ export default defineComponent({
   components: {
     NavBar,
     NotifCircle,
+    BackToPage,
   },
   data: () => ({
     id_user: "",
   }),
 
   created() {
+    console.log(cookies.get("userId"));
     this.id_user = cookies.get("userId") || "";
+    console.log(this.id_user);
   },
   computed: {
     condition() {

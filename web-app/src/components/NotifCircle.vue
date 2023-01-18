@@ -21,7 +21,7 @@
       </div>
     </template>
     <v-list>
-      <v-list-item v-if="getNotificationsNumber() === 0" link>
+      <v-list-item v-if="getNotificationsNumber === 0" link>
         <v-list-item-title>Vous n'avez pas de notifications</v-list-item-title>
       </v-list-item>
       <v-list-item v-for="notif in notifications" :key="notif.message" link>
@@ -43,40 +43,41 @@ export default defineComponent({
     notifications: [],
   }),
   props: {
-    "id-user": String,
+    idUser: String,
   },
 
   created() {
-    if (this.$props["id-user"]) {
+    if (this.$props.idUser) {
       this.$axios
-        .get("http://127.0.0.1:3001/notifs/" + this.$props["id-user"])
+        .get("http://127.0.0.1:3001/notifs/" + this.$props.idUser)
         .then((rep) => {
           rep.data.map((notification: never) => {
             this.notifications.push(notification);
           });
+          console.log("coucou", this.notifications);
         });
     }
   },
-
   methods: {
     seeNotifs() {
-      var request =
-        "http://127.0.0.1:3001/notifs/seen/" + this.$props["id-user"];
+      var request = "http://127.0.0.1:3001/notifs/seen/" + this.$props.idUser;
       fetch(request, { method: "PUT" }).then((rep) => {
         rep.json();
       });
     },
+  },
+
+  computed: {
     howMany_unseen() {
       return this.notifications.filter((notif) => {
         return notif.seen === false;
       }).length;
     },
     getNotificationsNumber() {
+      console.log("notif number", this.notifications.length);
       return this.notifications.length;
     },
   },
-
-  computed: {},
 });
 </script>
 
