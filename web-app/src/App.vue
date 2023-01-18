@@ -29,7 +29,9 @@ export default defineComponent({
   data: () => ({
     id_user: "",
   }),
-
+  beforeCreate() {
+    this.$store.commit("initialiseStore");
+  },
   created() {
     console.log(cookies.get("userId"));
     this.id_user = cookies.get("userId") || "";
@@ -37,7 +39,12 @@ export default defineComponent({
   },
   computed: {
     condition() {
-      return !(this.$route.path === "/" || this.$route.path === "/register");
+      return !(
+        this.$route.path === "/" ||
+        this.$route.path === "/register" ||
+        this.$route.path === "/customerRegister" ||
+        this.$route.path === "/deliveryRegister"
+      );
     },
   },
 });
