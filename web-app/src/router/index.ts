@@ -97,6 +97,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("../views/DeliveryView.vue"),
   },
   {
+    path: "/restaurateurRegister",
+    name: "restaurateurRegister",
+    component: () => import("../views/RestaurateurView.vue"),
+  },
+  {
     path: "/Checkout",
     name: "Checkout",
     component: () => import("../views/CheckoutView.vue"),

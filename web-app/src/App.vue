@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <nav-bar />
-      <back-to-page />
+      <back-to-page v-if="$route.path !== '/'" />
       <router-view />
       <notif-circle v-if="condition" :id-user="id_user" />
     </v-main>
