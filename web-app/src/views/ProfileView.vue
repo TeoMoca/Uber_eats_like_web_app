@@ -125,6 +125,10 @@ export default defineComponent({
         this.country = data.data.adress[0].country;
         this.city = data.data.adress[0].city;
       });
+    this.$store.commit("addCount");
+    console.log(this.$store.getters.getCount);
+    const a = this.$store.getters.getCart;
+    console.log(a[0]);
   },
   data: () => ({
     userId: "",

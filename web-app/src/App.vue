@@ -28,7 +28,9 @@ export default defineComponent({
     notifs: Object,
     requestUrl: "http://127.0.0.1:3001/notifs/",
   }),
-
+  beforeCreate() {
+    this.$store.commit("initialiseStore");
+  },
   created() {
     this.id_user = cookies.get("userId") || "";
     fetch(this.requestUrl + this.id_user, { method: "GET" }).then((rep) => {

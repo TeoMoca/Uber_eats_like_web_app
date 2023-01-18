@@ -58,6 +58,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "Profile",
     component: () => import("../views/ProfileView.vue"),
   },
+  {
+    path: "/Checkout",
+    name: "Checkout",
+    component: () => import("../views/CheckoutView.vue"),
+  },
 ];
 
 const router = createRouter({
