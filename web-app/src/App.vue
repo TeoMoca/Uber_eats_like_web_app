@@ -13,6 +13,7 @@ import { defineComponent } from "vue";
 
 import NavBar from "./components/NavBar.vue";
 import NotifCircle from "./components/NotifCircle.vue";
+//import VueTest from "./views/VueTest.vue";
 
 import Cookies from "cookies-ts";
 const cookies = new Cookies();
@@ -22,6 +23,7 @@ export default defineComponent({
   components: {
     NavBar,
     NotifCircle,
+    //VueTest,
   },
   data: () => ({
     id_user: "",
