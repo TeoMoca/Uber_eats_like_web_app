@@ -19,12 +19,12 @@
       <div class="search-items">
         <a
           class="item"
-          v-for="fruit in filteredList()"
-          :key="fruit"
-          :href="'http://localhost:8080/restaurants/' + fruit"
+          v-for="item in filteredList()"
+          :key="item.name"
+          :href="'http://localhost:8080/restaurants/' + item.name"
         >
-          <img class="item-img" />
-          <p>{{ fruit }}</p>
+          <img class="item-img" :src="item.image" />
+          <p>{{ item.name }}</p>
         </a>
         <div class="item error" v-if="search && !filteredList().length">
           <p>No results found!</p>
@@ -35,11 +35,9 @@
     <div tabindex="1" class="user" v-if="getUserInitials() && condition">
       {{ getUserInitials() }}
       <div class="options">
-        <v-btn variant="plain" @click="RedirectProfile">
-          Mes informations
-        </v-btn>
+        <p @click="RedirectProfile">Mes informations</p>
         <p>Voir mes commandes</p>
-        <p>Ah ouais</p>
+        <p>Parrainez un amis</p>
         <p class="disconnect" @click="disconnect">Me déconnecter</p>
       </div>
     </div>
@@ -56,30 +54,32 @@ export default defineComponent({
   name: "NavBar",
   computed: {
     condition() {
-      var isdisplay = true;
-      if (this.$route.path === "/") isdisplay = false;
-      if (this.$route.path === "/Register") isdisplay = false;
-      return isdisplay;
+      return !(
+        this.$route.path === "/" ||
+        this.$route.path === "/register" ||
+        this.$route.path === "/customerRegister" ||
+        this.$route.path === "/deliveryRegister"
+      );
     },
   },
   beforeCreate() {
     this.$axios
-      .get("http://localhost:8000/users/", {
+      .get("http://localhost:4001/restaurant/displayAllRestaurant", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
         },
       })
       .then((rep) => {
-        rep.data.map((item: { firstname: string }) => {
-          this.restaurants.push(item.firstname);
+        rep.data.map((item) => {
+          this.restaurants.push(item);
         });
       });
   },
   data: (): {
     title: string;
     search: string;
-    restaurants: string[];
+    restaurants: { name: string; image: string }[];
     initials: string;
   } => ({
     title: "U Beuh'r Eats",
@@ -94,7 +94,7 @@ export default defineComponent({
     filteredList() {
       const regex = new RegExp("^" + this.$data.search.toLowerCase());
       const filteredFruits = this.$data.restaurants.filter((restaurant) =>
-        regex.test(restaurant.toLowerCase())
+        regex.test(restaurant.name.toLowerCase())
       );
       return filteredFruits;
     },
@@ -133,6 +133,7 @@ export default defineComponent({
   grid-template-columns: max-content 1fr max-content max-content max-content;
   grid-template-areas: "title blank search cart user-options";
   padding: 10px;
+  position: fixed;
 }
 
 .nav-bar .title {
@@ -194,6 +195,7 @@ export default defineComponent({
   width: 100%;
   height: 80px;
   background: var(--light-mode-color-one);
+  object-fit: cover;
 }
 
 .user {

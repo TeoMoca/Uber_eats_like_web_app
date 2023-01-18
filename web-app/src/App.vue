@@ -2,8 +2,9 @@
   <v-app>
     <v-main>
       <nav-bar />
+      <back-to-page v-if="$route.path !== '/'" />
       <router-view />
-      <notif-circle v-if="condition" :id_user="id_user" :notifs="notifs" />
+      <notif-circle v-if="condition" :id-user="id_user" />
     </v-main>
   </v-app>
 </template>
@@ -13,7 +14,7 @@ import { defineComponent } from "vue";
 
 import NavBar from "./components/NavBar.vue";
 import NotifCircle from "./components/NotifCircle.vue";
-//import VueTest from "./views/VueTest.vue";
+import BackToPage from "./components/BackToPage.vue";
 
 import Cookies from "cookies-ts";
 const cookies = new Cookies();
@@ -23,30 +24,27 @@ export default defineComponent({
   components: {
     NavBar,
     NotifCircle,
-    //VueTest,
+    BackToPage,
   },
   data: () => ({
     id_user: "",
-    notifs: Object,
-    requestUrl: "http://127.0.0.1:3001/notifs/",
   }),
-
+  beforeCreate() {
+    this.$store.commit("initialiseStore");
+  },
   created() {
+    console.log(cookies.get("userId"));
     this.id_user = cookies.get("userId") || "";
-    fetch(this.requestUrl + this.id_user, { method: "GET" }).then((rep) => {
-      console.log("requrl", this.requestUrl + this.id_user);
-      rep.json().then((data) => {
-        console.log(data);
-        this.notifs = data;
-      });
-    });
+    console.log(this.id_user);
   },
   computed: {
     condition() {
-      var isdisplay = true;
-      if (this.$route.path === "/") isdisplay = false;
-      if (this.$route.path === "/Register") isdisplay = false;
-      return !(this.$route.path === "/" || this.$route.path === "/register");
+      return !(
+        this.$route.path === "/" ||
+        this.$route.path === "/register" ||
+        this.$route.path === "/customerRegister" ||
+        this.$route.path === "/deliveryRegister"
+      );
     },
   },
 });

@@ -86,7 +86,9 @@
         />
       </v-container>
       <v-divider></v-divider>
-
+      <v-btn variant="flat" color="error" @click="dialog = true">
+        Supprimer votre compte
+      </v-btn>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="success" :disabled="!valid" class="mr-4" type="submit">
@@ -95,8 +97,29 @@
       </v-card-actions>
     </v-form>
   </v-card>
+
+  <ReferOne />
+
+  <v-dialog v-model="dialog" width="500">
+    <v-card>
+      <v-card-title class="text-h5"> Supression de compte </v-card-title>
+
+      <v-card-text> Voulez-vous vraiment supprimer votre compte </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn text @click="dialog = false"> Annuler </v-btn>
+        <v-btn color="red" text @click="deleteUser"> Supprimer </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
   <v-snackbar v-model="updated" close-delay="200" location="top right">
     <p>Vos modifications ont été enregistré !</p>
+  </v-snackbar>
+
+  <v-snackbar v-model="deleted" close-delay="200" location="top right">
+    <p>Votre compte a bien été supprimé !</p>
   </v-snackbar>
 </template>
 
@@ -105,6 +128,7 @@ import { Adress } from "../../Model/Adress";
 import { defineComponent } from "vue";
 import { User } from "../../Model/User";
 import Cookies from "cookies-ts";
+import ReferOne from "@/components/ReferOne.vue";
 
 const cookies = new Cookies();
 export default defineComponent({
@@ -125,6 +149,10 @@ export default defineComponent({
         this.country = data.data.adress[0].country;
         this.city = data.data.adress[0].city;
       });
+    this.$store.commit("addCount");
+    console.log(this.$store.getters.getCount);
+    const a = this.$store.getters.getCart;
+    console.log(a[0]);
   },
   data: () => ({
     userId: "",
@@ -158,11 +186,28 @@ export default defineComponent({
     countryrules: [(v) => !!v || "Le pays est obligatoire"],
     city: "",
     cityrules: [(v) => !!v || "La ville est obligatoire"],
+    dialog: false,
+    deleted: false,
   }),
   methods: {
+    async deleteUser() {
+      await this.$axios
+        .delete("http://localhost:5001/api/users/" + cookies.get("userId"))
+        .then(async (rep) => {
+          console.log(rep.data);
+          if (rep.data) {
+            this.dialog = false;
+            this.deleted = true;
+            await new Promise((t) => setTimeout(t, 2000));
+            cookies.remove("token");
+            cookies.remove("firstname");
+            cookies.remove("lastname");
+            this.$router.push({ path: "/" });
+          }
+        });
+    },
     async validate() {
       const { valid } = await (this.$refs.form as HTMLFormElement).validate();
-
       if (valid) {
         console.log(cookies.get("userId"));
         const user = new User(
@@ -174,7 +219,6 @@ export default defineComponent({
           this.email,
           this.password
         );
-
         const adress = new Adress(
           this.addressId,
           this.adressname,
@@ -182,15 +226,14 @@ export default defineComponent({
           this.city,
           this.country
         );
-
         const isUpdated = (await this.$axios.patch(
           "http://localhost:5001/api/users",
           { users: user, adress: adress }
         )) as boolean;
-
         this.updated = isUpdated;
       }
     },
   },
+  components: { ReferOne },
 });
 </script>
