@@ -14,7 +14,7 @@
         </v-col>
         <v-col cols="3" md="4">
           <v-btn
-            @click="toRestorerRegister"
+            @click="toRestaurateurRegister"
             prepend-icon="mdi-chef-hat"
             color="primary"
           >
@@ -42,8 +42,8 @@ export default defineComponent({
     toCustomerRegister() {
       this.$router.push("/customerRegister");
     },
-    toRestorerRegister() {
-      this.$router.push("/restorerRegister");
+    toRestaurateurRegister() {
+      this.$router.push("/restaurateurRegister");
     },
     toDeliveryRegister() {
       this.$router.push("/deliveryRegister");
