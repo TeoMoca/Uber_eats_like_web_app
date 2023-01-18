@@ -11,24 +11,26 @@
     <div v-for="menu in menus" :key="menu.name">
       {{ menu.name }}
     </div>
+    <DraggableList />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import DraggableList from "../components/DraggableList.vue";
 
 export default defineComponent({
   name: "RestaurantView",
-
-  composant: {},
-
+  composant: { DraggableList },
   data: (): {
     restaurant: {
       image: string;
       notes: number;
       _id: string;
     };
-    menus: Array<{ name: string }>;
+    menus: Array<{
+      name: string;
+    }>;
     display: Array<string>;
   } => ({
     restaurant: {
@@ -39,14 +41,12 @@ export default defineComponent({
     menus: [],
     display: ["article", "menus", "articles"],
   }),
-
   created() {
     this.$axios
       .get(
         `http://localhost:4001/restaurant/displayRestaurant/${this.$route.params.name}`
       )
       .then((rep) => {
-        console.log(rep.data);
         this.restaurant = rep.data;
         this.$axios
           .get(`http://localhost:3000/menus/${this.restaurant._id}`)
@@ -54,11 +54,9 @@ export default defineComponent({
             rep.data.map((menu) => {
               this.menus.push(menu);
             });
-            console.log(this.menus);
           });
       });
   },
-
   computed: {},
   methods: {
     getComponent(componentTitle: string) {
@@ -78,6 +76,7 @@ export default defineComponent({
       }
     },
   },
+  components: { DraggableList },
 });
 </script>
 
