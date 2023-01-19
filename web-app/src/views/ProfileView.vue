@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="844" title="Mon Profile">
+  <v-card class="mx-auto cardcontainer" max-width="844" title="Mon Profile">
     <v-form ref="form" class="mb-2" v-model="valid" @submit.prevent="validate">
       <v-container>
         <v-row>
@@ -260,3 +260,8 @@ export default defineComponent({
   components: { ReferOne },
 });
 </script>
+<style>
+.cardcontainer {
+  margin-top: 120px;
+}
+</style>

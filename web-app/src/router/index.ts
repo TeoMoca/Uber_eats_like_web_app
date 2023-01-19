@@ -132,6 +132,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "Checkout",
     component: () => import("../views/CheckoutView.vue"),
   },
+  {
+    path: "/payed/:commandid",
+    name: "/payed",
+    component: () => import("../views/PayedView.vue"),
+  },
 ];
 
 const router = createRouter({

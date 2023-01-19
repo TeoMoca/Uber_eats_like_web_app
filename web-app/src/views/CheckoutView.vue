@@ -114,8 +114,8 @@ export default defineComponent({
   }),
   mounted() {
     const storeItems = this.$store.getters.getCart as Articles;
-    this.items = storeItems.item;
-    this.menus = storeItems.menu;
+    this.items = storeItems.items;
+    this.menus = storeItems.menus;
     this.subtotal = this.$store.getters.getSubCartTotal;
     this.tax = this.$store.getters.getTax;
     this.total = this.$store.getters.cartTotal;
@@ -133,22 +133,32 @@ export default defineComponent({
       this.tax = this.$store.getters.getTax;
       this.total = this.$store.getters.cartTotal;
       const storeItems = this.$store.getters.getCart as Articles;
-      this.items = storeItems.item;
-      this.menus = storeItems.menu;
+      this.items = storeItems.items;
+      this.menus = storeItems.menus;
     },
 
     async Pay() {
       const articles = new Articles(this.menus, this.items);
-      this.$axios
-        .post("http://localhost:9001/commands/send", {
+      const commandid = await this.$axios.post(
+        "http://localhost:9001/commands/send",
+        {
           customerId: cookies.get("userId"),
           restorantId: this.menus[0].id_restaurant,
           date: Date(),
           price: this.total,
           articles: articles,
+        }
+      );
+      await this.$axios
+        .post("http://localhost:7000/api/payment/createCheckoutSession", {
+          userId: cookies.get("userId"),
+          commandid: commandid.data.commandid,
+          menus: this.menus,
+          items: this.items,
         })
         .then((rep) => {
-          console.log(rep);
+          console.log(rep.data);
+          window.location.href = rep.data.url;
         });
     },
   },
