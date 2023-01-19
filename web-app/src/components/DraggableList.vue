@@ -9,30 +9,26 @@
       <div
         class="drag-el"
         v-for="item in listOne"
-        :key="item.title"
-        @click="removeFromList(item.id)"
+        :key="item.name"
+        @click="removeFromList(item._id)"
       >
-        {{ item.title }}
+        {{ item.name }}
       </div>
     </div>
-    <div
-      class="drop-zone"
-      @drop="onDrop($event)"
-      @dragover.prevent
-      @dragenter.prevent
-    >
+    <div class="drop-zone" @dragover.prevent @dragenter.prevent>
       <div
         class="drag-el"
         v-for="item in filteredList"
-        :key="item.title"
+        :key="item.name"
         draggable="true"
         @dragstart="startDrag($event, item)"
       >
-        {{ item.title }}
+        {{ item.name }}
       </div>
       <div class="drag-el">+</div>
     </div>
   </div>
+  <button @click="sendData">Valider</button>
 </template>
 
 <script lang="ts">
@@ -41,34 +37,45 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "DraggableList",
   data: (): {
-    listOne: Array<{ id: number; title: string; list: number }>;
-    listTwo: Array<{ id: number; title: string; list: number }>;
+    listOne: Array<{ _id: string; name: string; list: number }>;
+    listTwo: Array<{ _id: string; name: string; list: number }>;
   } => {
     return {
       listOne: [],
-      listTwo: [
-        {
-          id: 0,
-          title: "Item A",
-          list: 2,
-        },
-        {
-          id: 1,
-          title: "Item B",
-          list: 2,
-        },
-        {
-          id: 2,
-          title: "Item C",
-          list: 2,
-        },
-      ],
+      listTwo: [],
     };
+  },
+  props: {
+    id: String,
+  },
+  created() {
+    this.$axios
+      .get(
+        `http://localhost:4001/restaurant/displayRestaurant/${this.$props.id}`
+      )
+      .then((rep) => {
+        console.log(rep.data.display);
+        rep.data.display.map((item) => {
+          this.listOne.push(item);
+        });
+      });
+
+    console.log("props id", this.id, this.$props);
+    this.$axios.get(`http://localhost:3000/catalog/${this.id}`).then((rep) => {
+      console.log("draggableLIst", rep.data, Array.apply(rep.data));
+      Object.values<Array<{ _id: string; name: string; list: number }>>(
+        rep.data
+      ).map((list: Array<{ _id: string; name: string; list: number }>) => {
+        list.map((item) => {
+          this.listTwo.push(item);
+        });
+      });
+    });
   },
   computed: {
     filteredList() {
       return this.listTwo.filter((e) => {
-        return this.listOne.indexOf(e) === -1;
+        return !this.listOne.find((item) => item._id == e._id);
       });
     },
   },
@@ -76,20 +83,38 @@ export default defineComponent({
     startDrag(evt, item) {
       evt.dataTransfer.dropEffect = "move";
       evt.dataTransfer.effectAllowed = "move";
-      evt.dataTransfer.setData("itemID", item.id);
+      evt.dataTransfer.setData("itemID", item._id);
     },
     onDrop(evt) {
       const itemID = evt.dataTransfer.getData("itemID");
-      const item = this.listTwo.find((item) => item.id == itemID);
-      if (item && !this.listOne.find((item) => item.id == itemID)) {
+      console.log(itemID);
+      const item = this.listTwo.find((item) => item._id == itemID);
+      console.log(this.listOne.find((item) => item._id == itemID));
+      if (item && !this.listOne.find((item) => item._id == itemID)) {
         this.listOne.push(item);
       }
 
       console.log("lists", this.listOne, this.listTwo);
     },
     removeFromList(id) {
-      const index = this.listOne.findIndex((item) => item.id == id);
+      const index = this.listOne.findIndex((item) => item._id == id);
       this.listOne.splice(index, 1);
+    },
+    sendData() {
+      this.$axios
+        .get(
+          `http://localhost:4001/restaurant/displayRestaurant/${this.$props.id}`
+        )
+        .then((rep) => {
+          console.log(rep.data);
+          rep.data.display = Object.values(this.listOne);
+          console.log(rep.data);
+          this.$axios
+            .put("http://localhost:4001/restaurant/modify", rep.data)
+            .then((rep) => {
+              console.log(rep.data);
+            });
+        });
     },
   },
 });
@@ -106,6 +131,9 @@ export default defineComponent({
   background-color: #eee;
   margin-bottom: 10px;
   padding: 10px;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .drag-el {
   background-color: #fff;

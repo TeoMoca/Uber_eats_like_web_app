@@ -45,7 +45,7 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: "/restaurants/:name",
+    path: "/restaurants/:id",
     name: "restaurant",
     component: RestaurantView,
     beforeEnter: (to, from, next) => {

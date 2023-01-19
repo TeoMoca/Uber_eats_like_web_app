@@ -16,7 +16,7 @@ import VueTest from "./VueTest.vue";
 
 export default defineComponent({
   name: "HomeView",
-  components: { SliderSection },
+  components: { SliderSection, VueTest },
   data: (): {
     restaurants: { notes: number }[];
   } => ({
