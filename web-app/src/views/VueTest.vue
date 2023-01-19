@@ -1,7 +1,8 @@
 <template>
   <div class="itemsBox">
     <ArticleCard v-for="item in dataList" :key="item.id" :item="item" />
-    <CreationItemButton restaurant_id="1" />
+    <CreationItemButton restaurant_id="63c9522b9b9813eea90d4207" />
+    <CreationDraggableList restaurant_id="63c9522b9b9813eea90d4207" />
   </div>
 </template>
 
@@ -9,10 +10,10 @@
 import { defineComponent } from "vue";
 import ArticleCard from "../components/ArticleCard.vue";
 import CreationItemButton from "../components/CreationItemButton.vue";
-
+import CreationDraggableList from "../components/CreationDraggableList.vue";
 export default defineComponent({
   name: "VueTest",
-  composant: { ArticleCard, CreationItemButton },
+  composant: { ArticleCard, CreationItemButton, CreationDraggableList },
   data: (): {
     requestUrl: string;
     dataList: Array<{
@@ -31,7 +32,7 @@ export default defineComponent({
       });
     });
   },
-  components: { ArticleCard, CreationItemButton },
+  components: { ArticleCard, CreationItemButton, CreationDraggableList },
 });
 </script>
 
