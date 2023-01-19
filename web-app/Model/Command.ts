@@ -1,10 +1,10 @@
-import { Item } from './Item';
+import {Articles} from './Articles'
 export interface Command {
     objectid:string,
     customerId: string;
     restorantId:string;
     date:Date,
-    articles: Item[];
+    articles: Articles;
     price:number;
 }
 
@@ -14,7 +14,7 @@ export class Command implements Command{
         public customerId:string,
         public restorantId:string,
         public date: Date, 
-        public articles: Item[],
+        public articles: Articles,
         public price:number
     ){}
 }

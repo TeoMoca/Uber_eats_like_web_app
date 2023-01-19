@@ -1,104 +1,138 @@
 <template>
-  <v-card class="mx-auto cardcontainer" max-width="844" title="Mon Profile">
-    <v-form ref="form" class="mb-2" v-model="valid" @submit.prevent="validate">
-      <v-container>
+  <v-container class="container">
+    <v-row>
+      <v-col cols="18">
+        <v-card
+          class="mx-auto cardcontainer"
+          max-width="844"
+          title="Mon Profile"
+        >
+          <v-form
+            ref="form"
+            class="mb-2"
+            v-model="valid"
+            @submit.prevent="validate"
+          >
+            <v-container>
+              <v-row>
+                <v-col cold="12" md="6">
+                  <v-text-field
+                    v-model="firstname"
+                    class="mb-2"
+                    label="Prénom"
+                    :rules="firstnamerules"
+                    required
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12" md="6"
+                  ><v-text-field
+                    v-model="lastname"
+                    class="mb-2"
+                    label="Nom"
+                    :rules="lastnamerules"
+                    required
+                /></v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="password"
+                    class="mb-2"
+                    label="Mot de passe"
+                    :rules="passwordrules"
+                    required
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    prepend-inner-icon="mdi-email"
+                    v-model="email"
+                    class="mb-2"
+                    label="Email"
+                    :rules="emailrules"
+                    required
+                  />
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="phone"
+                    class="mb-2"
+                    label="Téléphone"
+                    :rules="phonerules"
+                    required
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="adressname"
+                    class="mb-2"
+                    label="Adresse"
+                    :rules="addressnamerules"
+                    required
+                  />
+                </v-col>
+              </v-row>
+              <v-text-field
+                v-model="codepostal"
+                class="mb-2"
+                label="Code Postal"
+                :rules="codepostalrules"
+                required
+              />
+              <v-text-field
+                v-model="country"
+                class="mb-2"
+                label="Pays"
+                :rules="countryrules"
+                required
+              />
+              <v-text-field
+                v-model="city"
+                class="mb-2"
+                label="Ville"
+                :rules="cityrules"
+                required
+              />
+            </v-container>
+            <v-divider></v-divider>
+            <v-btn variant="flat" color="error" @click="dialog = true">
+              Supprimer votre compte
+            </v-btn>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="success"
+                :disabled="!valid"
+                class="mr-4"
+                type="submit"
+              >
+                Modifier
+              </v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card>
+      </v-col>
+      <v-col class="cardcontainer" cols="4">
         <v-row>
-          <v-col cold="12" md="6">
-            <v-text-field
-              v-model="firstname"
-              class="mb-2"
-              label="Prénom"
-              :rules="firstnamerules"
-              required
-            >
-            </v-text-field>
-          </v-col>
-          <v-col cols="12" md="6"
-            ><v-text-field
-              v-model="lastname"
-              class="mb-2"
-              label="Nom"
-              :rules="lastnamerules"
-              required
-          /></v-col>
+          <ReferOne />
         </v-row>
         <v-row>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="password"
-              class="mb-2"
-              label="Mot de passe"
-              :rules="passwordrules"
-              required
-            />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              prepend-inner-icon="mdi-email"
-              v-model="email"
-              class="mb-2"
-              label="Email"
-              :rules="emailrules"
-              required
-            />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="phone"
-              class="mb-2"
-              label="Téléphone"
-              :rules="phonerules"
-              required
-            />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="adressname"
-              class="mb-2"
-              label="Adresse"
-              :rules="addressnamerules"
-              required
-            />
-          </v-col>
-        </v-row>
-        <v-text-field
-          v-model="codepostal"
-          class="mb-2"
-          label="Code Postal"
-          :rules="codepostalrules"
-          required
-        />
-        <v-text-field
-          v-model="country"
-          class="mb-2"
-          label="Pays"
-          :rules="countryrules"
-          required
-        />
-        <v-text-field
-          v-model="city"
-          class="mb-2"
-          label="Ville"
-          :rules="cityrules"
-          required
-        />
-      </v-container>
-      <v-divider></v-divider>
-      <v-btn variant="flat" color="error" @click="dialog = true">
-        Supprimer votre compte
-      </v-btn>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="success" :disabled="!valid" class="mr-4" type="submit">
-          Modifier
-        </v-btn>
-      </v-card-actions>
-    </v-form>
-  </v-card>
+          <v-card class="commandhistoric" width="400">
+            <v-card-item>
+              <v-card-title justify-center="true"
+                >Mon historique de commande</v-card-title
+              >
+            </v-card-item>
 
-  <ReferOne />
+            <v-card-text> historique </v-card-text>
+          </v-card>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 
   <v-dialog v-model="dialog" width="500">
     <v-card>
@@ -263,5 +297,8 @@ export default defineComponent({
 <style>
 .cardcontainer {
   margin-top: 120px;
+}
+.commandhistoric {
+  margin-top: 50px;
 }
 </style>
