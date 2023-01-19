@@ -1,10 +1,7 @@
 <template>
-<div class="container">
-  <div></div>
-</div>
-
-
-
+  <div class="container">
+    <div></div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -68,17 +65,30 @@ export default defineComponent({
     const datas = await this.$axios.get(
       "http://localhost:9001/commands/" + cookies.get("userId")
     );
-    for(const data of datas.data){
-        const items = this.toItems(datas.data.articles.items);
-        const menus = this.toMenus(datas.data.articles.menus);
-        var command = new Command(datas.data.objectid, datas.data.customerId, datas.data.restorantId, datas.data.date, new Articles(menus, items), datas.data.price);
-        this.commands.push(command);
+    for (const data of datas.data) {
+      const items = this.toItems(datas.data.articles.items);
+      const menus = this.toMenus(datas.data.articles.menus);
+      var command = new Command(
+        datas.data.objectid,
+        datas.data.customerId,
+        datas.data.restorantId,
+        datas.data.date,
+        new Articles(menus, items),
+        datas.data.price,
+        datas.data.adress,
+        datas.data.city,
+        datas.data.codePostal,
+        datas.data.isPaid,
+        datas.data.isAcceptedByRestaureur,
+        datas.data.isInDelivery
+      );
+      this.commands.push(command);
     }
   },
 });
 </script>
 <style>
-.container{
-    border-bottom: 3px solid black;
+.container {
+  border-bottom: 3px solid black;
 }
 </style>

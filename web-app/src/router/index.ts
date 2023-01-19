@@ -137,6 +137,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "/payed",
     component: () => import("../views/PayedView.vue"),
   },
+  {
+    path: "/pendingdelivery",
+    name: "pendingdelivery",
+    component: () => import("../views/PendingDeliveryView.vue"),
+  },
 ];
 
 const router = createRouter({

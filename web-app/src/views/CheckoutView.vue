@@ -139,6 +139,9 @@ export default defineComponent({
 
     async Pay() {
       const articles = new Articles(this.menus, this.items);
+      const user = await this.$axios.get(
+        "http://localhost:5001/api/users/" + cookies.get("userId")
+      );
       const commandid = await this.$axios.post(
         "http://localhost:9001/commands/send",
         {
@@ -147,6 +150,9 @@ export default defineComponent({
           date: Date(),
           price: this.total,
           articles: articles,
+          adress: user.data.adress[0].adress,
+          city: user.data.adress[0].city,
+          codePostal: user.data.adress[0].codePostal,
         }
       );
       await this.$axios
