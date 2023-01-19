@@ -133,7 +133,7 @@ export default defineComponent({
     //Livraisons
     this.$axios
       .get(
-        "http://localhost:3000/livraison/livreur/" +
+        "http://localhost:1000/livraison/livreur/" +
           this.$cookies.get("userId"),
         // "http://localhost:3000/api/users/",
         // { userId: cookies.get("userId") },
@@ -150,7 +150,7 @@ export default defineComponent({
       });
     this.$axios
       .get(
-        "http://localhost:3000/commande/client/" + this.$cookies.get("userId"),
+        "http://localhost:1000/commande/client/" + this.$cookies.get("userId"),
         // "http://localhost:3000/api/users/",
         // { userId: cookies.get("userId") },
         {

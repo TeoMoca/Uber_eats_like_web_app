@@ -88,7 +88,7 @@ export default defineComponent({
       }
     },
     livraisonValide() {
-      axios.post("http://localhost:3000/livraison/done/" + this.idLivreur);
+      axios.post("http://localhost:1000/livraison/done/" + this.idLivreur);
     },
   },
   computed: {},
@@ -97,12 +97,12 @@ export default defineComponent({
     //recupère les données de la livraison
     console.log(this.idLivreur);
     axios
-      .get("http://localhost:3000/livraison/livreur/" + this.idLivreur)
+      .get("http://localhost:1000/livraison/livreur/" + this.idLivreur)
       .then((resLivraison) => {
         this.commandeData = resLivraison.data;
         //recupère les données de la commande
         axios
-          .get("http://localhost:3000/commande/" + resLivraison.data.commandeID)
+          .get("http://localhost:1000/commande/" + resLivraison.data.commandeID)
           .then((resCommande) => {
             this.commandeData = resCommande.data;
             //recupère les données du client

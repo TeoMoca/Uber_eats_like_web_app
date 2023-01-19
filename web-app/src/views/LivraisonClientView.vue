@@ -85,7 +85,7 @@ export default defineComponent({
     //recupère les données du client
     axios
       .get(
-        "http://localhost:3000/livraison/commande/" + this.$props.id.slice(1)
+        "http://localhost:1000/livraison/commande/" + this.$props.id.slice(1)
       )
       .then((resLivraison) => {
         this.livraisonData = resLivraison.data;
@@ -96,7 +96,7 @@ export default defineComponent({
           });
       });
     axios
-      .get("http://localhost:3000/commande/" + this.$props.id.slice(1))
+      .get("http://localhost:1000/commande/" + this.$props.id.slice(1))
       .then((resCommande) => {
         this.commandeData = resCommande.data;
       });
