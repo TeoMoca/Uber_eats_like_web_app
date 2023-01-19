@@ -46,9 +46,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Cookies from "cookies-ts";
-
-const cookies = new Cookies();
 
 export default defineComponent({
   name: "NavBar",
@@ -99,18 +96,18 @@ export default defineComponent({
       return filteredFruits;
     },
     getUserInitials() {
-      const firstname = cookies.get("firstname");
-      const lastname = cookies.get("lastname");
+      const firstname = this.$cookies.get("firstname") as string;
+      const lastname = this.$cookies.get("lastname") as string;
       if (firstname && lastname) {
         this.initials = firstname?.charAt(0) + lastname?.charAt(0) || "";
         return this.initials;
       }
     },
     disconnect() {
-      cookies.remove("token");
-      cookies.remove("firstname");
-      cookies.remove("lastname");
-      cookies.remove("userId");
+      this.$cookies.remove("token");
+      this.$cookies.remove("firstname");
+      this.$cookies.remove("lastname");
+      this.$cookies.remove("userId");
       this.$router.push({ path: "/" });
     },
   },

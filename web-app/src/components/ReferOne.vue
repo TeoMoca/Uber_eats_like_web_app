@@ -12,16 +12,15 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Cookies from "cookies-ts";
-
-const cookies = new Cookies();
 export default defineComponent({
   data: () => ({
     refers: [],
   }),
   async created() {
     await this.$axios
-      .get("http://localhost:5001/api/users/refers/" + cookies.get("userId"))
+      .get(
+        "http://localhost:5001/api/users/refers/" + this.$cookies.get("userId")
+      )
       .then((rep) => {
         console.log(rep.data);
         this.refers = rep.data;
