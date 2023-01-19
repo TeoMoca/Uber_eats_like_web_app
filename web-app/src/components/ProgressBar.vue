@@ -14,7 +14,7 @@
           >Commande préparé, le livreur va la récupérer</span
         >
       </li>
-      <li :class="['step-wizard-item', state === '3' ? 'current-item' : '']">
+      <li :class="['step-wizard-item', state === 'EC' ? 'current-item' : '']">
         <span class="progress-count">{{ state }}</span>
         <span class="progress-label">Le livreur se dirige chez vous</span>
       </li>

@@ -3,7 +3,7 @@
     <ProgressBar
       class="pBar"
       msg="test"
-      :state="this.currentStateLivraison.toString()"
+      :state="this.commandeData.commandeStatut"
     ></ProgressBar>
     <div class="container">
       <div id="livreur">
@@ -72,35 +72,16 @@ export default defineComponent({
   name: "LivraisonView",
   data() {
     return {
-      idLivreur: cookies.get("userId"),
-      livreurData: {},
+      idClient: cookies.get("userId"),
+      clientData: {},
       commandeData: {},
       livraisonData: {},
-      currentStateLivraison: 1,
     };
   },
   methods: {},
   computed: {},
   components: { ProgressBar },
   created() {
-    //recupère les données du livreur
-    axios
-      .get("http://localhost:7000/api/users/" + this.idLivreur)
-      .then((res) => {
-        this.livreurData = res.data;
-      });
-    //recupère les données de la livraison
-    axios
-      .get("http://localhost:3000/livraison/livreur/" + this.idLivreur)
-      .then((resLivraison) => {
-        this.commandeData = resLivraison.data;
-        //recupère les données de la commande
-        axios
-          .get("http://localhost:3000/commande/" + resLivraison.data.commandeID)
-          .then((resCommande) => {
-            this.commandeData = resCommande.data;
-          });
-      });
     // res.data.forEach(element => {
     // this.livreurData.livreurFName = element.firstname, this.livreurData.livreurLName = element.lastname, this.livreurData.livreurPNumber = element.phone, console.log(element)})
   },
