@@ -10,7 +10,7 @@
     </h1>
 
     <v-spacer></v-spacer>
-    <div class="search-bar" v-if="condition">
+    <div class="search-bar" tabindex="1" v-if="condition">
       <input
         type="text"
         v-model="search"
@@ -21,7 +21,7 @@
           class="item"
           v-for="item in filteredList()"
           :key="item.name"
-          :href="'http://localhost:8080/restaurants/' + item.name"
+          :href="'http://localhost:8080/restaurants/' + item._id"
         >
           <img class="item-img" :src="item.image" />
           <p>{{ item.name }}</p>
@@ -79,7 +79,7 @@ export default defineComponent({
   data: (): {
     title: string;
     search: string;
-    restaurants: { name: string; image: string }[];
+    restaurants: { name: string; image: string; _id: string }[];
     initials: string;
   } => ({
     title: "U Beuh'r Eats",
@@ -134,6 +134,7 @@ export default defineComponent({
   grid-template-areas: "title blank search cart user-options";
   padding: 10px;
   position: fixed;
+  z-index: 200;
 }
 
 .nav-bar .title {
@@ -158,6 +159,7 @@ export default defineComponent({
 .search-bar:focus-within .search-items {
   display: block;
 }
+
 .search-items {
   display: none;
   position: absolute;
@@ -188,6 +190,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   gap: 10px;
+  cursor: pointer;
   color: var(--light-mode-color-one);
 }
 

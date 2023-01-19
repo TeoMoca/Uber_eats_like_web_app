@@ -20,7 +20,9 @@
 
     <v-card-actions>
       <v-btn color="orange" text> Commander </v-btn>
-      <div class="price">{{ item.price }} €</div>
+      <div class="price">
+        {{ parseFloat(item.price).toFixed(2).replace(".", ",") }} €
+      </div>
     </v-card-actions>
   </v-card>
 </template>
@@ -47,5 +49,9 @@ export default defineComponent({
 
 .v-card {
   width: 100%;
+  height: 100%;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
 }
 </style>

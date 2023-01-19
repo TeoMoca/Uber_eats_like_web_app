@@ -31,5 +31,6 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   color: #fff;
+  z-index: 200;
 }
 </style>
