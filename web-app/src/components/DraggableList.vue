@@ -62,7 +62,6 @@ export default defineComponent({
 
     console.log("props id", this.id, this.$props);
     this.$axios.get(`http://localhost:3000/catalog/${this.id}`).then((rep) => {
-      console.log("draggableLIst", rep.data, Array.apply(rep.data));
       Object.values<Array<{ _id: string; name: string; list: number }>>(
         rep.data
       ).map((list: Array<{ _id: string; name: string; list: number }>) => {
