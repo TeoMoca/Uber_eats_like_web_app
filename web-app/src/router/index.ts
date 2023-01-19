@@ -3,6 +3,8 @@ import LoginView from "../views/LoginView.vue";
 import HomeView from "../views/HomeView.vue";
 import RestaurateurHomeView from "../views/RestaurateurViews/RestaurateurHomeView.vue";
 import RestaurantView from "../views/RestaurantView.vue";
+import livraisonClientView from "../views/LivraisonClientView.vue";
+import livraisonLivreurView from "../views/LivraisonLivreurView.vue";
 import axios from "axios";
 import Cookies from "cookies-ts";
 
@@ -60,13 +62,36 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: "/livraison",
+    path: "/livraison/:id",
     name: "livraison",
+    props: true,
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/LivraisonView.vue"),
+    component: () => {
+      return axios
+        .get(`http://localhost:5001/api/users/${cookies.get("userId")}`)
+        .then((rep) => {
+          console.log(rep.data.roleId);
+          switch (rep.data.roleId) {
+            case 1: {
+              return livraisonClientView;
+            }
+            case 2: {
+              return livraisonClientView;
+            }
+            case 3: {
+              return livraisonLivreurView;
+            }
+            case 4: {
+              return livraisonClientView;
+            }
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    },
   },
   {
     path: "/:catchAll(.*)",

@@ -32,6 +32,28 @@
       </div>
     </div>
     <v-icon v-if="condition">mdi-shopping</v-icon>
+    <div v-if="livraison" class="user">
+      <v-icon v-if="livraison"
+        ><v-btn variant="plain"></v-btn>mdi-bicycle</v-icon
+      >
+    </div>
+    <div v-if="commandesEnCours" class="user" tabindex="1">
+      <v-badge v-bind:content="commandes.length" floating
+        ><v-icon>mdi-food</v-icon></v-badge
+      >
+      <div class="options">
+        <a
+          variant="plain"
+          v-for="commande in commandes.filter(
+            (commande) => commande.commandeStatut == 'EC'
+          )"
+          :key="commande.id"
+          :href="'/livraison/:' + commande.id"
+        >
+          {{ commande.id }}
+        </a>
+      </div>
+    </div>
     <div tabindex="1" class="user" v-if="getUserInitials() && condition">
       {{ getUserInitials() }}
       <div class="options">
@@ -58,8 +80,32 @@ export default defineComponent({
         this.$route.path === "/deliveryRegister"
       );
     },
+    livraison() {
+      var isdisplay = true;
+      if (this.$data.livraisons === undefined) {
+        isdisplay = false;
+      }
+      if (this.$route.path !== "/home") {
+        isdisplay = false;
+      }
+      if (this.$data.idRole !== 3) {
+        isdisplay = false;
+      }
+      return isdisplay;
+    },
+    commandesEnCours() {
+      var isdisplay = true;
+      if (this.$data.idRole !== 2) {
+        isdisplay = false;
+      }
+      if (this.$route.path === "/livraison") {
+        isdisplay = false;
+      }
+      return isdisplay;
+    },
   },
   beforeCreate() {
+    //Restaurant
     this.$axios
       .get("http://localhost:4001/restaurant/displayAllRestaurant", {
         headers: {
@@ -72,17 +118,69 @@ export default defineComponent({
           this.restaurants.push(item);
         });
       });
+    //
+    this.$axios
+      .get("http://localhost:5001/api/users/" + this.$cookies.get("userId"), {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((rep) => {
+        this.idRole = rep.data.roleId;
+        console.log(this.idRole);
+      });
+    //Livraisons
+    this.$axios
+      .get(
+        "http://localhost:1000/livraison/livreur/" +
+          this.$cookies.get("userId"),
+        // "http://localhost:3000/api/users/",
+        // { userId: cookies.get("userId") },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
+      .then((rep) => {
+        this.livraisons = rep.data;
+        console.log(this.$data.livraisons);
+      });
+    this.$axios
+      .get(
+        "http://localhost:1000/commande/client/" + this.$cookies.get("userId"),
+        // "http://localhost:3000/api/users/",
+        // { userId: cookies.get("userId") },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
+      .then((rep) => {
+        this.commandes = rep.data;
+        console.log(this.$data.commandes);
+      });
   },
   data: (): {
     title: string;
     search: string;
     restaurants: { name: string; image: string; _id: string }[];
     initials: string;
+    idRole: number;
+    livraisons: object;
+    commandes: Array<{ commandeStatut: string; id: string }>;
   } => ({
     title: "U Beuh'r Eats",
     search: "",
     restaurants: [],
     initials: "",
+    idRole: 0,
+    livraisons: {},
+    commandes: [],
   }),
   methods: {
     RedirectProfile() {
@@ -228,6 +326,7 @@ export default defineComponent({
   top: 85%;
   right: 85%;
   overflow: hidden;
+  z-index: 200;
 }
 
 .user .options p {

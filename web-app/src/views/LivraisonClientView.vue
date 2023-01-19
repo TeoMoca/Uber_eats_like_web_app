@@ -3,7 +3,7 @@
     <ProgressBar
       class="pBar"
       msg="test"
-      :state="this.currentStateLivraison.toString()"
+      :state="commandeData.commandeStatut"
     ></ProgressBar>
     <div class="container">
       <div id="livreur">
@@ -15,25 +15,25 @@
           <div class="number">{{ livreurData.phone }}</div>
           <button
             :class="{ bouton: true }"
-            v-on:click="currentStateLivraison = 2"
+            v-on:click="commandeData.commandeStatut = 'EP'"
           >
             1
           </button>
           <button
             :class="{ bouton: true }"
-            v-on:click="currentStateLivraison = 3"
+            v-on:click="commandeData.commandeStatut = 'P'"
           >
             2
           </button>
           <button
             :class="{ bouton: true }"
-            v-on:click="currentStateLivraison = 4"
+            v-on:click="commandeData.commandeStatut = 'EC'"
           >
             3
           </button>
           <button
             :class="{ bouton: true }"
-            v-on:click="currentStateLivraison = 5"
+            v-on:click="commandeData.commandeStatut = 'F'"
           >
             4
           </button>
@@ -53,50 +53,60 @@
             {{ article }}
           </li>
           <li>{{ commandeData.orderDetails.prix }}</li>
-          <li>{{ currentStateLivraison }}</li>
         </ul>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="js">
+<script lang="ts">
 import { defineComponent } from "vue";
 import ProgressBar from "./../components/ProgressBar.vue";
 import axios from "axios";
+import Cookies from "cookies-ts";
 
+const cookies = new Cookies();
 
 export default defineComponent({
-    name: "LivraisonView",
-    data() {
-        return {
-            idLivreur: "0daaf5b6-5299-44b8-9d45-fe4270d34ea1",
-            livreurData:{},
-            commandeData:{},
-            livraisonData:{},
-            currentStateLivraison:1,
-        }
-    },
-    methods: { },
-    computed: {
-    },
-    components: { ProgressBar },
-    created() {
-      //recupère les données du livreur
-      axios.get("http://localhost:7000/api/users/"+this.idLivreur).then(res => {
-      this.livreurData=res.data})
-      //recupère les données de la livraison
-      axios.get("http://localhost:3000/livraison/livreur/"+this.idLivreur).then(resLivraison =>{ this.commandeData = resLivraison.data
-      //recupère les données de la commande
-      axios.get("http://localhost:3000/commande/"+resLivraison.data.commandeID).then(resCommande =>{ this.commandeData = resCommande.data })
-      })
-      // res.data.forEach(element => {
-      // this.livreurData.livreurFName = element.firstname, this.livreurData.livreurLName = element.lastname, this.livreurData.livreurPNumber = element.phone, console.log(element)})
-  }
+  name: "LivraisonView",
+  data() {
+    return {
+      idClient: cookies.get("userId"),
+      livreurData: {},
+      commandeData: {},
+      livraisonData: {},
+    };
+  },
+  props: ["id"],
+  methods: {},
+  computed: {},
+  components: { ProgressBar },
+  created() {
+    //recupère les données du client
+    axios
+      .get(
+        "http://localhost:1000/livraison/commande/" + this.$props.id.slice(1)
+      )
+      .then((resLivraison) => {
+        this.livraisonData = resLivraison.data;
+        axios
+          .get("http://localhost:5001/api/users/" + resLivraison.data.livreurID)
+          .then((resLivreur) => {
+            this.livreurData = resLivreur.data;
+          });
+      });
+    axios
+      .get("http://localhost:1000/commande/" + this.$props.id.slice(1))
+      .then((resCommande) => {
+        this.commandeData = resCommande.data;
+      });
+    // res.data.forEach(element => {
+    // this.livreurData.livreurFName = element.firstname, this.livreurData.livreurLName = element.lastname, this.livreurData.livreurPNumber = element.phone, console.log(element)})
+  },
 });
 </script>
 
-<style>
+<style scoped>
 .main {
   display: flex;
   width: 100%;
