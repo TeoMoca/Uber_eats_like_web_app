@@ -127,16 +127,14 @@
 import { Adress } from "../../Model/Adress";
 import { defineComponent } from "vue";
 import { User } from "../../Model/User";
-import Cookies from "cookies-ts";
 import ReferOne from "@/components/ReferOne.vue";
 
-const cookies = new Cookies();
 export default defineComponent({
   async created() {
     this.$axios
-      .get("http://localhost:5001/api/users/" + cookies.get("userId"))
+      .get("http://localhost:5001/api/users/" + this.$cookies.get("userId"))
       .then((data) => {
-        this.userId = cookies.get("userId") as string;
+        this.userId = this.$cookies.get("userId") as string;
         this.firstname = data.data.firstname;
         this.roleId = data.data.roleId;
         this.lastname = data.data.lastname;
@@ -192,16 +190,18 @@ export default defineComponent({
   methods: {
     async deleteUser() {
       await this.$axios
-        .delete("http://localhost:5001/api/users/" + cookies.get("userId"))
+        .delete(
+          "http://localhost:5001/api/users/" + this.$cookies.get("userId")
+        )
         .then(async (rep) => {
           console.log(rep.data);
           if (rep.data) {
             this.dialog = false;
             this.deleted = true;
             await new Promise((t) => setTimeout(t, 2000));
-            cookies.remove("token");
-            cookies.remove("firstname");
-            cookies.remove("lastname");
+            this.$cookies.remove("token");
+            this.$cookies.remove("firstname");
+            this.$cookies.remove("lastname");
             this.$router.push({ path: "/" });
           }
         });
@@ -209,7 +209,7 @@ export default defineComponent({
     async validate() {
       const { valid } = await (this.$refs.form as HTMLFormElement).validate();
       if (valid) {
-        console.log(cookies.get("userId"));
+        console.log(this.$cookies.get("userId"));
         const user = new User(
           this.userId,
           0,
