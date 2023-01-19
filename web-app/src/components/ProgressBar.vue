@@ -2,25 +2,36 @@
   <section class="step-wizard">
     <ul class="step-wizard-list">
       <li
-        :class="['step-wizard-item', state === '1' ? 'current-item' : '']"
+        :class="['step-wizard-item', state === 'EP' ? 'current-item' : '']"
         id="1"
       >
-        <span class="progress-count">1</span>
+        <span class="progress-count"
+          ><v-icon v-if="state === 'EP'">mdi-chef-hat</v-icon></span
+        >
         <span class="progress-label">En préparation</span>
       </li>
-      <li :class="['step-wizard-item', state === '2' ? 'current-item' : '']">
-        <span class="progress-count">2</span>
+      <li :class="['step-wizard-item', state === 'P' ? 'current-item' : '']">
+        <span class="progress-count"
+          ><v-icon v-if="state === 'P'">mdi-food</v-icon></span
+        >
         <span class="progress-label"
           >Commande préparé, le livreur va la récupérer</span
         >
       </li>
       <li :class="['step-wizard-item', state === 'EC' ? 'current-item' : '']">
-        <span class="progress-count">{{ state }}</span>
+        <span class="progress-count"
+          ><v-icon v-if="state === 'EC'">mdi-bicycle</v-icon></span
+        >
         <span class="progress-label">Le livreur se dirige chez vous</span>
       </li>
-      <li :class="['step-wizard-item', state === '4' ? 'current-item' : '']">
-        <span class="progress-count">4</span>
-        <span class="progress-label">Livraison validée</span>
+      <li :class="['step-wizard-item', state === 'F' ? 'current-item' : '']">
+        <span class="progress-count"
+          ><v-icon v-if="state === 'F'">mdi-robot-happy</v-icon></span
+        >
+        <span class="progress-label"
+          >Commande livré, il ne vous reste plus qu'à donner votre code au
+          livreur</span
+        >
       </li>
     </ul>
   </section>

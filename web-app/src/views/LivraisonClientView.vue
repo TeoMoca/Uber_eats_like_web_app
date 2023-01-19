@@ -15,25 +15,25 @@
           <div class="number">{{ livreurData.phone }}</div>
           <button
             :class="{ bouton: true }"
-            v-on:click="currentStateLivraison = 2"
+            v-on:click="this.commandeData.commandeStatut = 'EP'"
           >
             1
           </button>
           <button
             :class="{ bouton: true }"
-            v-on:click="currentStateLivraison = 3"
+            v-on:click="this.commandeData.commandeStatut = 'P'"
           >
             2
           </button>
           <button
             :class="{ bouton: true }"
-            v-on:click="currentStateLivraison = 4"
+            v-on:click="this.commandeData.commandeStatut = 'EC'"
           >
             3
           </button>
           <button
             :class="{ bouton: true }"
-            v-on:click="currentStateLivraison = 5"
+            v-on:click="this.commandeData.commandeStatut = 'F'"
           >
             4
           </button>
@@ -53,7 +53,6 @@
             {{ article }}
           </li>
           <li>{{ commandeData.orderDetails.prix }}</li>
-          <li>{{ currentStateLivraison }}</li>
         </ul>
       </div>
     </div>
@@ -73,15 +72,34 @@ export default defineComponent({
   data() {
     return {
       idClient: cookies.get("userId"),
-      clientData: {},
+      livreurData: {},
       commandeData: {},
       livraisonData: {},
     };
   },
+  props: ["id"],
   methods: {},
   computed: {},
   components: { ProgressBar },
   created() {
+    //recupère les données du client
+    axios
+      .get(
+        "http://localhost:3000/livraison/commande/" + this.$props.id.slice(1)
+      )
+      .then((resLivraison) => {
+        this.livraisonData = resLivraison.data;
+        axios
+          .get("http://localhost:5001/api/users/" + resLivraison.data.livreurID)
+          .then((resLivreur) => {
+            this.livreurData = resLivreur.data;
+          });
+      });
+    axios
+      .get("http://localhost:3000/commande/" + this.$props.id.slice(1))
+      .then((resCommande) => {
+        this.commandeData = resCommande.data;
+      });
     // res.data.forEach(element => {
     // this.livreurData.livreurFName = element.firstname, this.livreurData.livreurLName = element.lastname, this.livreurData.livreurPNumber = element.phone, console.log(element)})
   },

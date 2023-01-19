@@ -32,9 +32,28 @@
       </div>
     </div>
     <v-icon v-if="condition">mdi-shopping</v-icon>
-    <v-btn :to="'/livraison'" v-if="livraison"
-      ><v-icon v-if="livraison">mdi-bicycle-basket</v-icon></v-btn
-    >
+    <div v-if="livraison" class="user">
+      <v-icon v-if="livraison"
+        ><v-btn variant="plain"></v-btn>mdi-bicycle</v-icon
+      >
+    </div>
+    <div v-if="commandesEnCours" class="user" tabindex="1">
+      <v-badge v-bind:content="commandes.length" floating
+        ><v-icon>mdi-food</v-icon></v-badge
+      >
+      <div class="options">
+        <a
+          variant="plain"
+          v-for="commande in commandes.filter(
+            (commande) => commande.commandeStatut == 'EC'
+          )"
+          :key="commande"
+          :href="'/livraison/:' + commande.id"
+        >
+          {{ commande.id }}
+        </a>
+      </div>
+    </div>
     <div tabindex="1" class="user" v-if="getUserInitials() && condition">
       {{ getUserInitials() }}
       <div class="options">
@@ -60,8 +79,12 @@ export default defineComponent({
   computed: {
     condition() {
       var isdisplay = true;
-      if (this.$route.path === "/") isdisplay = false;
-      if (this.$route.path === "/Register") isdisplay = false;
+      if (this.$route.path === "/") {
+        isdisplay = false;
+      }
+      if (this.$route.path === "/Register") {
+        isdisplay = false;
+      }
       return isdisplay;
     },
     livraison() {
@@ -69,16 +92,27 @@ export default defineComponent({
       if (this.$data.livraisons === undefined) {
         isdisplay = false;
       }
-      if (
-        this.$route.path === "/livraison" &&
-        this.$data.livraisons.length < 2
-      ) {
+      if (this.$route.path !== "/home") {
+        isdisplay = false;
+      }
+      if (this.$data.idRole !== 3) {
+        isdisplay = false;
+      }
+      return isdisplay;
+    },
+    commandesEnCours() {
+      var isdisplay = true;
+      if (this.$data.idRole !== 2) {
+        isdisplay = false;
+      }
+      if (this.$route.path === "/livraison") {
         isdisplay = false;
       }
       return isdisplay;
     },
   },
   beforeCreate() {
+    //Restaurant
     this.$axios
       .get("http://localhost:5001/api/users/", {
         headers: {
@@ -91,11 +125,50 @@ export default defineComponent({
           this.restaurants.push(item.firstname);
         });
       });
+    //
     this.$axios
-      .get("http://localhost:3000/livraison/livreur/" + cookies.get("userId"))
-      .then((resp) => {
-        this.livraisons = resp.data.length();
-        console.log(resp.data);
+      .get("http://localhost:5001/api/users/" + cookies.get("userId"), {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((rep) => {
+        this.idRole = rep.data.roleId;
+        console.log(this.idRole);
+      });
+    //Livraisons
+    this.$axios
+      .get(
+        "http://localhost:3000/livraison/livreur/" + cookies.get("userId"),
+        // "http://localhost:3000/api/users/",
+        // { userId: cookies.get("userId") },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
+      .then((rep) => {
+        this.livraisons = rep.data;
+        console.log(this.$data.livraisons);
+      });
+    this.$axios
+      .get(
+        "http://localhost:3000/commande/client/" + cookies.get("userId"),
+        // "http://localhost:3000/api/users/",
+        // { userId: cookies.get("userId") },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
+      .then((rep) => {
+        this.commandes = rep.data;
+        console.log(this.$data.commandes);
       });
   },
   data: (): {
@@ -103,13 +176,17 @@ export default defineComponent({
     search: string;
     restaurants: string[];
     initials: string;
-    livraisons: string;
+    idRole: number;
+    livraisons: object;
+    commandes: Array<{ commandeStatut: string; id: string }>;
   } => ({
     title: "U Beuh'r Eats",
     search: "",
     restaurants: [],
     initials: "",
-    livraisons: "",
+    idRole: 0,
+    livraisons: {},
+    commandes: [],
   }),
   methods: {
     RedirectProfile() {
@@ -250,6 +327,7 @@ export default defineComponent({
   top: 85%;
   right: 85%;
   overflow: hidden;
+  z-index: 200;
 }
 
 .user .options p {

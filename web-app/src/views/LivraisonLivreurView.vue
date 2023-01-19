@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="container">
+    <div class="container-content">
       <div id="livreur">
         <div class="container-user">
           <div class="container">
@@ -9,17 +9,26 @@
             </div>
             <div class="number">{{ clientData.phone }}</div>
           </div>
-          <div v-if="livraisonDone == false">Entrez le code validation</div>
-          <input
-            type="text"
-            maxlength="5"
-            v-model="resultDigit"
-            :placeholder="'ouai'"
-            :on-keypress="checkOTP()"
-          />
-          <v-btn v-if="livraisonDone" :to="'./home'" :onclick="livraisonValide"
-            >Valider la livraison</v-btn
-          >
+          <div class="container">
+            <div v-if="digitSuccess == false">Entrez le code validation</div>
+            <div class="container-input">
+              <input
+                class="input"
+                type="text"
+                maxlength="5"
+                v-model="resultDigit"
+                :placeholder="'ouai'"
+                :on-keypress="checkOTP()"
+              />
+              <v-btn
+                v-if="digitSuccess"
+                :to="'./home'"
+                :onclick="livraisonValide"
+                >Valider la livraison</v-btn
+              >
+              <v-label v-if="digitEchec == true"> Mauvais Code</v-label>
+            </div>
+          </div>
         </div>
       </div>
       <div id="map">
@@ -61,17 +70,20 @@ export default defineComponent({
       digits: 5,
       digitResult: "12345",
       resultDigit: "",
-      livraisonDone: false,
+      digitSuccess: false,
+      digitEchec: false,
     };
   },
   methods: {
     checkOTP() {
       if (this.$data.digitResult.length == this.$data.resultDigit.length) {
         if (this.$data.digitResult === this.$data.resultDigit) {
-          this.$data.livraisonDone = true;
+          this.$data.digitSuccess = true;
+          this.$data.digitEchec = false;
         } else {
           this.$data.resultDigit = "";
-          return false;
+          this.$data.digitSuccess = false;
+          this.$data.digitEchec = true;
         }
       }
     },
@@ -139,29 +151,44 @@ export default defineComponent({
 }
 .container {
   display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.container > * {
+  margin: 5px;
+}
+.container-content {
+  display: flex;
   width: 90%;
   height: 60%;
   align-items: center;
   justify-content: center;
   flex-direction: row;
   box-sizing: border-box;
-  position: relative;
   border-radius: 30px;
   border: 1px solid var(--light-mode-color-five);
-  margin-bottom: 10px;
+  margin-top: 40px;
   overflow: hidden;
+  margin: 5px;
 }
-.container > * {
+.container-content > * {
   background-color: #fff;
+}
+.container-input > * {
+  margin: 10px;
 }
 .container-user {
   display: flex;
   width: 100%;
-  height: 50%;
-  margin: 10px;
+  height: 100%;
+  margin: 5px;
   align-items: center;
-  justify-content: flex-start;
-  flex-direction: row;
+  justify-content: center;
+  flex-direction: column;
 }
 .container-user > * {
   margin: 20px;
@@ -207,7 +234,7 @@ export default defineComponent({
   flex-direction: column;
 }
 #commande > * {
-  margin: 5px;
+  margin-top: 50px;
 }
 
 .restaurant-title {
@@ -216,5 +243,16 @@ export default defineComponent({
   font-size: 45px;
   align-items: center;
   justify-content: center;
+}
+.input {
+  width: 100px;
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  margin-right: 10px;
+}
+.input:focus-visible {
+  border: 0px solid;
+  outline: 5px solid var(--light-mode-color-four);
 }
 </style>
