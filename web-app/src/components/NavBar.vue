@@ -10,7 +10,7 @@
     </h1>
 
     <v-spacer></v-spacer>
-    <div class="search-bar" v-if="condition">
+    <div class="search-bar" tabindex="1" v-if="condition">
       <input
         type="text"
         v-model="search"
@@ -21,7 +21,7 @@
           class="item"
           v-for="item in filteredList()"
           :key="item.name"
-          :href="'http://localhost:8080/restaurants/' + item.name"
+          :href="'http://localhost:8080/restaurants/' + item._id"
         >
           <img class="item-img" :src="item.image" />
           <p>{{ item.name }}</p>
@@ -46,9 +46,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Cookies from "cookies-ts";
-
-const cookies = new Cookies();
 
 export default defineComponent({
   name: "NavBar",
@@ -79,7 +76,7 @@ export default defineComponent({
   data: (): {
     title: string;
     search: string;
-    restaurants: { name: string; image: string }[];
+    restaurants: { name: string; image: string; _id: string }[];
     initials: string;
   } => ({
     title: "U Beuh'r Eats",
@@ -99,18 +96,18 @@ export default defineComponent({
       return filteredFruits;
     },
     getUserInitials() {
-      const firstname = cookies.get("firstname");
-      const lastname = cookies.get("lastname");
+      const firstname = this.$cookies.get("firstname") as string;
+      const lastname = this.$cookies.get("lastname") as string;
       if (firstname && lastname) {
         this.initials = firstname?.charAt(0) + lastname?.charAt(0) || "";
         return this.initials;
       }
     },
     disconnect() {
-      cookies.remove("token");
-      cookies.remove("firstname");
-      cookies.remove("lastname");
-      cookies.remove("userId");
+      this.$cookies.remove("token");
+      this.$cookies.remove("firstname");
+      this.$cookies.remove("lastname");
+      this.$cookies.remove("userId");
       this.$router.push({ path: "/" });
     },
   },
@@ -134,6 +131,7 @@ export default defineComponent({
   grid-template-areas: "title blank search cart user-options";
   padding: 10px;
   position: fixed;
+  z-index: 200;
 }
 
 .nav-bar .title {
@@ -158,6 +156,7 @@ export default defineComponent({
 .search-bar:focus-within .search-items {
   display: block;
 }
+
 .search-items {
   display: none;
   position: absolute;
@@ -188,6 +187,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   gap: 10px;
+  cursor: pointer;
   color: var(--light-mode-color-one);
 }
 
