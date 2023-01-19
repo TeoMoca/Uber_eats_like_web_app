@@ -12,7 +12,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import SliderSection from "../components/SliderSection.vue";
-// import VueTest from "./VueTest.vue";
+//import VueTest from "./VueTest.vue";
 
 export default defineComponent({
   name: "HomeView",

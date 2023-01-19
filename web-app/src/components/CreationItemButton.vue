@@ -220,13 +220,6 @@ export default defineComponent({
         });
       this.dialog = false;
     },
-    getItemNameList: function () {
-      var list: Array<string> = [];
-      this.itemsList.map((item) => {
-        list.push(item.name);
-      });
-      return list;
-    },
   },
   created() {
     this.newItem.id_restaurant = this.restaurant_id;
