@@ -3,7 +3,9 @@
     <v-main>
       <nav-bar />
       <back-to-page v-if="$route.path !== '/'" />
-      <router-view />
+      <div class="router-container">
+        <router-view />
+      </div>
       <notif-circle v-if="condition" :id-user="id_user" />
     </v-main>
   </v-app>
@@ -15,9 +17,6 @@ import { defineComponent } from "vue";
 import NavBar from "./components/NavBar.vue";
 import NotifCircle from "./components/NotifCircle.vue";
 import BackToPage from "./components/BackToPage.vue";
-
-import Cookies from "cookies-ts";
-const cookies = new Cookies();
 
 export default defineComponent({
   name: "App",
@@ -33,9 +32,7 @@ export default defineComponent({
     this.$store.commit("initialiseStore");
   },
   created() {
-    console.log(cookies.get("userId"));
-    this.id_user = cookies.get("userId") || "";
-    console.log(this.id_user);
+    this.id_user = this.$cookies.get("userId") as string;
   },
   computed: {
     condition() {
@@ -87,5 +84,9 @@ body ::-webkit-scrollbar-track {
 body ::-webkit-scrollbar-thumb {
   border-radius: 20px;
   background: var(--light-mode-color-four);
+}
+
+.router-container {
+  margin-top: 130px;
 }
 </style>

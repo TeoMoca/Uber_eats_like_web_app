@@ -138,9 +138,6 @@
 import { defineComponent } from "vue";
 import axios from "axios";
 
-import Cookies from "cookies-ts";
-const cookies = new Cookies();
-
 export default defineComponent({
   name: "CreationItemButton",
   data: function (): {
