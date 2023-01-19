@@ -10,7 +10,7 @@
     </h1>
 
     <v-spacer></v-spacer>
-    <div class="search-bar" v-if="condition">
+    <div class="search-bar" tabindex="1" v-if="condition">
       <input
         type="text"
         v-model="search"
@@ -19,12 +19,12 @@
       <div class="search-items">
         <a
           class="item"
-          v-for="fruit in filteredList()"
-          :key="fruit"
-          :href="'http://localhost:8080/restaurants/' + fruit"
+          v-for="item in filteredList()"
+          :key="item.name"
+          :href="'http://localhost:8080/restaurants/' + item._id"
         >
-          <img class="item-img" />
-          <p>{{ fruit }}</p>
+          <img class="item-img" :src="item.image" />
+          <p>{{ item.name }}</p>
         </a>
         <div class="item error" v-if="search && !filteredList().length">
           <p>No results found!</p>
@@ -47,7 +47,7 @@
           v-for="commande in commandes.filter(
             (commande) => commande.commandeStatut == 'EC'
           )"
-          :key="commande"
+          :key="commande.id"
           :href="'/livraison/:' + commande.id"
         >
           {{ commande.id }}
@@ -57,11 +57,9 @@
     <div tabindex="1" class="user" v-if="getUserInitials() && condition">
       {{ getUserInitials() }}
       <div class="options">
-        <v-btn variant="plain" @click="RedirectProfile">
-          Mes informations
-        </v-btn>
+        <p @click="RedirectProfile">Mes informations</p>
         <p>Voir mes commandes</p>
-        <p>Ah ouais</p>
+        <p>Parrainez un amis</p>
         <p class="disconnect" @click="disconnect">Me déconnecter</p>
       </div>
     </div>
@@ -70,22 +68,17 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Cookies from "cookies-ts";
-
-const cookies = new Cookies();
 
 export default defineComponent({
   name: "NavBar",
   computed: {
     condition() {
-      var isdisplay = true;
-      if (this.$route.path === "/") {
-        isdisplay = false;
-      }
-      if (this.$route.path === "/Register") {
-        isdisplay = false;
-      }
-      return isdisplay;
+      return !(
+        this.$route.path === "/" ||
+        this.$route.path === "/register" ||
+        this.$route.path === "/customerRegister" ||
+        this.$route.path === "/deliveryRegister"
+      );
     },
     livraison() {
       var isdisplay = true;
@@ -114,20 +107,20 @@ export default defineComponent({
   beforeCreate() {
     //Restaurant
     this.$axios
-      .get("http://localhost:5001/api/users/", {
+      .get("http://localhost:4001/restaurant/displayAllRestaurant", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
         },
       })
       .then((rep) => {
-        rep.data.map((item: { firstname: string }) => {
-          this.restaurants.push(item.firstname);
+        rep.data.map((item) => {
+          this.restaurants.push(item);
         });
       });
     //
     this.$axios
-      .get("http://localhost:5001/api/users/" + cookies.get("userId"), {
+      .get("http://localhost:5001/api/users/" + this.$cookies.get("userId"), {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -140,7 +133,8 @@ export default defineComponent({
     //Livraisons
     this.$axios
       .get(
-        "http://localhost:3000/livraison/livreur/" + cookies.get("userId"),
+        "http://localhost:3000/livraison/livreur/" +
+          this.$cookies.get("userId"),
         // "http://localhost:3000/api/users/",
         // { userId: cookies.get("userId") },
         {
@@ -156,7 +150,7 @@ export default defineComponent({
       });
     this.$axios
       .get(
-        "http://localhost:3000/commande/client/" + cookies.get("userId"),
+        "http://localhost:3000/commande/client/" + this.$cookies.get("userId"),
         // "http://localhost:3000/api/users/",
         // { userId: cookies.get("userId") },
         {
@@ -174,7 +168,7 @@ export default defineComponent({
   data: (): {
     title: string;
     search: string;
-    restaurants: string[];
+    restaurants: { name: string; image: string; _id: string }[];
     initials: string;
     idRole: number;
     livraisons: object;
@@ -195,23 +189,23 @@ export default defineComponent({
     filteredList() {
       const regex = new RegExp("^" + this.$data.search.toLowerCase());
       const filteredFruits = this.$data.restaurants.filter((restaurant) =>
-        regex.test(restaurant.toLowerCase())
+        regex.test(restaurant.name.toLowerCase())
       );
       return filteredFruits;
     },
     getUserInitials() {
-      const firstname = cookies.get("firstname");
-      const lastname = cookies.get("lastname");
+      const firstname = this.$cookies.get("firstname") as string;
+      const lastname = this.$cookies.get("lastname") as string;
       if (firstname && lastname) {
         this.initials = firstname?.charAt(0) + lastname?.charAt(0) || "";
         return this.initials;
       }
     },
     disconnect() {
-      cookies.remove("token");
-      cookies.remove("firstname");
-      cookies.remove("lastname");
-      cookies.remove("userId");
+      this.$cookies.remove("token");
+      this.$cookies.remove("firstname");
+      this.$cookies.remove("lastname");
+      this.$cookies.remove("userId");
       this.$router.push({ path: "/" });
     },
   },
@@ -234,6 +228,8 @@ export default defineComponent({
   grid-template-columns: max-content 1fr max-content max-content max-content;
   grid-template-areas: "title blank search cart user-options";
   padding: 10px;
+  position: fixed;
+  z-index: 200;
 }
 
 .nav-bar .title {
@@ -258,6 +254,7 @@ export default defineComponent({
 .search-bar:focus-within .search-items {
   display: block;
 }
+
 .search-items {
   display: none;
   position: absolute;
@@ -288,6 +285,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   gap: 10px;
+  cursor: pointer;
   color: var(--light-mode-color-one);
 }
 
@@ -295,6 +293,7 @@ export default defineComponent({
   width: 100%;
   height: 80px;
   background: var(--light-mode-color-one);
+  object-fit: cover;
 }
 
 .user {

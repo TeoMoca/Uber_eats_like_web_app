@@ -2,8 +2,11 @@
   <v-app>
     <v-main>
       <nav-bar />
-      <router-view />
-      <notif-circle v-if="condition" :id_user="id_user" :notifs="notifs" />
+      <back-to-page v-if="$route.path !== '/'" />
+      <div class="router-container">
+        <router-view />
+      </div>
+      <notif-circle v-if="condition" :id-user="id_user" />
     </v-main>
   </v-app>
 </template>
@@ -13,38 +16,32 @@ import { defineComponent } from "vue";
 
 import NavBar from "./components/NavBar.vue";
 import NotifCircle from "./components/NotifCircle.vue";
-
-import Cookies from "cookies-ts";
-const cookies = new Cookies();
+import BackToPage from "./components/BackToPage.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     NavBar,
     NotifCircle,
+    BackToPage,
   },
   data: () => ({
     id_user: "",
-    notifs: Object,
-    requestUrl: "http://127.0.0.1:3001/notifs/",
   }),
-
+  beforeCreate() {
+    this.$store.commit("initialiseStore");
+  },
   created() {
-    this.id_user = cookies.get("userId") || "";
-    fetch(this.requestUrl + this.id_user, { method: "GET" }).then((rep) => {
-      console.log("requrl", this.requestUrl + this.id_user);
-      rep.json().then((data) => {
-        console.log(data);
-        this.notifs = data;
-      });
-    });
+    this.id_user = this.$cookies.get("userId") as string;
   },
   computed: {
     condition() {
-      var isdisplay = true;
-      if (this.$route.path === "/") isdisplay = false;
-      if (this.$route.path === "/Register") isdisplay = false;
-      return !(this.$route.path === "/" || this.$route.path === "/register");
+      return !(
+        this.$route.path === "/" ||
+        this.$route.path === "/register" ||
+        this.$route.path === "/customerRegister" ||
+        this.$route.path === "/deliveryRegister"
+      );
     },
   },
 });
@@ -87,5 +84,9 @@ body ::-webkit-scrollbar-track {
 body ::-webkit-scrollbar-thumb {
   border-radius: 20px;
   background: var(--light-mode-color-four);
+}
+
+.router-container {
+  margin-top: 130px;
 }
 </style>

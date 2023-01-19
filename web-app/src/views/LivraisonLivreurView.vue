@@ -122,7 +122,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .main {
   display: flex;
   width: 100%;

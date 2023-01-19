@@ -17,8 +17,10 @@
         :type="'password'"
         label="Password"
       ></v-text-field>
-      <v-btn variant="plain" @click="RedirectRegister"> S'enregistrer </v-btn>
       <v-btn type="submit" :disabled="isDisabled">Se connecter </v-btn>
+      <p class="account-creation">
+        Pas de compte ? <a :href="'/register'"> Créer un compte</a>
+      </p>
     </v-form>
   </div>
 </template>
@@ -36,10 +38,10 @@ export default defineComponent({
     mail: "",
     mailRules: [
       (v: string) => {
-        return !!v || "E-mail is required";
+        return !!v || "L'email est requis";
       },
       (v: string) => {
-        return /.+@.+\..+/.test(v) || "E-mail must be valid";
+        return /.+@.+\..+/.test(v) || "L'email doit être valide";
       },
     ],
     password: "",
@@ -52,14 +54,11 @@ export default defineComponent({
   },
 
   methods: {
-    RedirectRegister() {
-      this.$router.push("/Register");
-    },
     validate(e: Event) {
       e.preventDefault();
       this.$axios
         .post(
-          "http://localhost:7070/users/login",
+          "http://localhost:8000/users/login",
           { mail: this.mail.toLowerCase(), password: this.password },
           {
             headers: {
@@ -112,8 +111,21 @@ export default defineComponent({
 
 .form {
   display: grid;
+  align-items: center;
   grid-template-rows: 1fr 1fr 1fr;
   grid-template-columns: 20vw;
   gap: 20px;
+}
+
+.account-creation {
+  display: flex;
+  justify-self: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.account-creation a {
+  text-decoration: underline;
+  color: blue;
 }
 </style>

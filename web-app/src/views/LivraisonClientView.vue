@@ -3,7 +3,7 @@
     <ProgressBar
       class="pBar"
       msg="test"
-      :state="this.commandeData.commandeStatut"
+      :state="commandeData.commandeStatut"
     ></ProgressBar>
     <div class="container">
       <div id="livreur">
@@ -15,25 +15,25 @@
           <div class="number">{{ livreurData.phone }}</div>
           <button
             :class="{ bouton: true }"
-            v-on:click="this.commandeData.commandeStatut = 'EP'"
+            v-on:click="commandeData.commandeStatut = 'EP'"
           >
             1
           </button>
           <button
             :class="{ bouton: true }"
-            v-on:click="this.commandeData.commandeStatut = 'P'"
+            v-on:click="commandeData.commandeStatut = 'P'"
           >
             2
           </button>
           <button
             :class="{ bouton: true }"
-            v-on:click="this.commandeData.commandeStatut = 'EC'"
+            v-on:click="commandeData.commandeStatut = 'EC'"
           >
             3
           </button>
           <button
             :class="{ bouton: true }"
-            v-on:click="this.commandeData.commandeStatut = 'F'"
+            v-on:click="commandeData.commandeStatut = 'F'"
           >
             4
           </button>
@@ -106,7 +106,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .main {
   display: flex;
   width: 100%;
