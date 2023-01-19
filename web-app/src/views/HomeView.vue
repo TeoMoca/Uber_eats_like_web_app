@@ -6,17 +6,17 @@
     <SliderSection title="NOS COMPAGNIES" :items="restaurants" />
     <SliderSection title="NOS MENUS" :items="restaurants" />
   </div>
-  <VueTest />
+  <!-- <VueTest /> -->
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import SliderSection from "../components/SliderSection.vue";
-import VueTest from "./VueTest.vue";
+// import VueTest from "./VueTest.vue";
 
 export default defineComponent({
   name: "HomeView",
-  components: { SliderSection, VueTest },
+  components: { SliderSection /*VueTest*/ },
   data: (): {
     restaurants: { notes: number }[];
   } => ({
