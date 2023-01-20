@@ -128,6 +128,8 @@ import { Adress } from "../../Model/Adress";
 import { defineComponent } from "vue";
 import { User } from "../../Model/User";
 import ReferOne from "@/components/ReferOne.vue";
+import { Item } from "../../Model/Item";
+import { Menu } from "../../Model/Menu";
 
 export default defineComponent({
   async created() {
@@ -147,10 +149,31 @@ export default defineComponent({
         this.country = data.data.adress[0].country;
         this.city = data.data.adress[0].city;
       });
-    this.$store.commit("addCount");
-    console.log(this.$store.getters.getCount);
-    const a = this.$store.getters.getCart;
-    console.log(a[0]);
+    const items = new Item(
+      "001",
+      2,
+      "pâtes carbonara",
+      "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
+      "",
+      "",
+      50,
+      1
+    );
+    console.log(items);
+    const menu = new Menu(
+      "002",
+      0,
+      "",
+      "Big mac",
+      "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
+      "",
+      68,
+      1,
+      []
+    );
+    console.log(menu);
+    this.$store.commit("addMenu", menu);
+    this.$store.commit("addItem", items);
   },
   data: () => ({
     userId: "",

@@ -1,36 +1,56 @@
 import { Store, createStore } from "vuex";
 import { Item } from "../../Model/Item";
+import { Articles } from "../../Model/Articles";
+import { Menu } from "../../Model/Menu";
 
 export interface State {
   count: number;
-  cart: Item[];
+  cart: Articles;
+  items: Item[];
 }
 
 export const store = createStore<State>({
   state: {
     count: 0,
-    cart: [],
+    items: [],
+    cart: new Articles([], []),
   },
   mutations: {
-    addCount(state, itemToAdd) {
-      state.count++;
-      const item = new Item(
-        itemToAdd.id,
-        itemToAdd.id_restaurant,
-        itemToAdd.name,
-        itemToAdd.picture,
-        "très",
-        "italien",
-        itemToAdd.price,
-        itemToAdd.quantity
-      );
-      state.cart.push(item);
+    addMenu(state, itemToAdd) {
+      state.cart.menu.push(itemToAdd);
     },
 
+    addItem(state, itemToAdd) {
+      state.cart.item.push(itemToAdd);
+    },
     addQuantity(state, data) {
-      for (const item of state.cart) {
-        if (item.id == data.id) {
+      for (const item of state.cart.item) {
+        if (item.objectid == data) {
           item.quantity++;
+        }
+      }
+      for (const menu of state.cart.menu) {
+        if (menu.objectid == data) {
+          menu.quantity++;
+        }
+      }
+    },
+
+    deleteQuantity(state, data) {
+      for (const item of state.cart.item) {
+        if (item.objectid == data) {
+          item.quantity--;
+        }
+        if (item.quantity <= 0) {
+          state.cart.item = state.cart.item.filter((p) => data != p.objectid);
+        }
+      }
+      for (const menu of state.cart.menu) {
+        if (menu.objectid == data) {
+          menu.quantity--;
+        }
+        if (menu.quantity <= 0) {
+          state.cart.menu = state.cart.menu.filter((p) => data != p.objectid);
         }
       }
     },
@@ -58,25 +78,41 @@ export const store = createStore<State>({
     getSubCartTotal(state) {
       let total = 0;
 
-      for (const price of state.cart) total += price.price;
+      for (const item of state.cart.item) {
+        total += item.price * item.quantity;
+      }
+
+      for (const menu of state.cart.menu) {
+        total += menu.price * menu.quantity;
+      }
+
       return total;
     },
     getTax(state) {
       let total = 0;
 
-      for (const price of state.cart) total += price.price;
+      for (const item of state.cart.item) {
+        total += item.price * item.quantity;
+      }
 
-      return total * 0.01;
+      for (const menu of state.cart.menu) {
+        total += menu.price * menu.quantity;
+      }
+
+      return total * 0.1;
     },
 
     cartTotal(state) {
       let total = 0;
       let tax = 0;
-      for (const price of state.cart) {
-        const article = price.price * price.quantity;
-        total += price.price;
+      for (const item of state.cart.item) {
+        total += item.price * item.quantity;
       }
-      tax = total * 0.01;
+
+      for (const menu of state.cart.menu) {
+        total += menu.price * menu.quantity;
+      }
+      tax = total * 0.1;
 
       return total + tax;
     },

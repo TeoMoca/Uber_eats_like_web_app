@@ -10,10 +10,12 @@ import cookies from "./plugins/cookies";
 import type { AxiosInstance } from "axios";
 import type { Store } from "vuex";
 import { Cookies } from "cookies-ts";
+import { Articles } from "../Model/Articles";
 
 declare module "@vue/runtime-core" {
   interface State {
     count: number;
+    cart: Articles;
   }
 
   interface ComponentCustomProperties {

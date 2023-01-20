@@ -1,5 +1,5 @@
 export interface Item {
-  id: string;
+  objectid:string,
   id_restaurant: number;
   name: string;
   picture: string;
@@ -11,7 +11,7 @@ export interface Item {
 
 export class Item implements Item {
   constructor(
-    public id: string,
+    public objectid:string,
     public id_restaurant: number,
     public name: string,
     public picture: string,
