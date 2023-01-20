@@ -24,7 +24,7 @@ export default defineComponent({
   }),
   created() {
     this.$axios
-      .get("http://localhost:4001/restaurant/displayAllRestaurant", {
+      .get("http://localhost:8000/restaurants/displayAllRestaurant", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",

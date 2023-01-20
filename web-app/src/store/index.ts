@@ -36,6 +36,11 @@ export const store = createStore<State>({
       }
     },
 
+    quantity(state) {
+      let quantity = 0;
+      quantity += state.cart.items.length;
+    },
+
     deleteQuantity(state, data) {
       for (const item of state.cart.items) {
         if (item.objectid == data) {

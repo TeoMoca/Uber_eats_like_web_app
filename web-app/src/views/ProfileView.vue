@@ -168,7 +168,7 @@ import { Menu } from "../../Model/Menu";
 export default defineComponent({
   async created() {
     this.$axios
-      .get("http://localhost:5001/api/users/" + this.$cookies.get("userId"))
+      .get("http://users:8000/users/users/" + this.$cookies.get("userId"))
       .then((data) => {
         this.userId = this.$cookies.get("userId") as string;
         this.firstname = data.data.firstname;
@@ -247,9 +247,7 @@ export default defineComponent({
   methods: {
     async deleteUser() {
       await this.$axios
-        .delete(
-          "http://localhost:5001/api/users/" + this.$cookies.get("userId")
-        )
+        .delete("http://users:8000/users/users" + this.$cookies.get("userId"))
         .then(async (rep) => {
           console.log(rep.data);
           if (rep.data) {

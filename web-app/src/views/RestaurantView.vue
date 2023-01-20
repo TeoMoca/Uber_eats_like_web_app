@@ -19,7 +19,7 @@
 import { defineComponent } from "vue";
 import DraggableList from "../components/DraggableList.vue";
 import ArticleCard from "../components/ArticleCard.vue";
-
+import { Item } from "../../Model/Item";
 export default defineComponent({
   name: "RestaurantView",
   data: (): {
@@ -32,7 +32,7 @@ export default defineComponent({
     menus: Array<{
       name: string;
     }>;
-    articles: Array<{ name: string }>;
+    articles: Item[];
     display: Array<{
       componentTitle: string;
       data: { name: string };
@@ -52,13 +52,13 @@ export default defineComponent({
     console.log(this.$route.params);
     this.$axios
       .get(
-        `http://localhost:4001/restaurant/displayRestaurant/${this.$route.params.id}`
+        `http://localhost:8000/restaurants/displayRestaurant/${this.$route.params.id}`
       )
       .then((rep) => {
         this.restaurant = rep.data;
         console.log(this.restaurant);
         this.$axios
-          .get(`http://localhost:3000/catalog/${this.restaurant._id}`)
+          .get(`http://localhost:8000/catalog/${this.restaurant._id}`)
           .then((rep) => {
             console.log("catalog api", rep.data);
             rep.data.menusList.map((menu) => {
@@ -71,7 +71,7 @@ export default defineComponent({
       });
     this.$axios
       .get(
-        `http://localhost:4001/restaurant/displayRestaurant/${this.$route.params.id}`
+        `http://localhost:8000/restaurants/displayRestaurant/${this.$route.params.id}`
       )
       .then((rep) => {
         console.log(rep.data);

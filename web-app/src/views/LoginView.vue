@@ -58,12 +58,11 @@ export default defineComponent({
       e.preventDefault();
       this.$axios
         .post(
-          "http://localhost:8000/users/login",
+          "http://localhost:8000/auth",
           { mail: this.mail.toLowerCase(), password: this.password },
           {
             headers: {
               "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
             },
           }
         )

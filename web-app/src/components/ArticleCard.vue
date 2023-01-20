@@ -19,7 +19,7 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn color="orange" text> Commander </v-btn>
+      <v-btn color="orange" text @click=""> Commander </v-btn>
       <div class="price">
         {{ parseFloat(item.price).toFixed(2).replace(".", ",") }} €
       </div>
@@ -28,6 +28,7 @@
 </template>
 
 <script lang="ts">
+import { Item } from "../../Model/Item";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -37,6 +38,21 @@ export default defineComponent({
   },
   created() {
     console.log(this);
+  },
+  methods: {
+    addToStore(data) {
+      const item = new Item(
+        data.objectid,
+        data.id_restaurant,
+        data.name,
+        data.picture,
+        data.description,
+        data.type,
+        data.price,
+        1
+      );
+      this.$store.commit("addItem", item);
+    },
   },
 });
 </script>
